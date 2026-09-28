@@ -37,8 +37,51 @@
 .sscpc-3d-logo.is-moving>img{filter:blur(.8px) brightness(1.06);transform:translateZ(30px) scale(1.018)}.sscpc-3d-logo.is-moving .sscpc-trail{opacity:1}
 @keyframes sscpcLogoFloat{50%{transform:translateY(-8px) rotateX(2deg) rotateY(-2deg)}}.sscpc-3d-logo{animation:sscpcLogoFloat 5s ease-in-out infinite}
 @media(max-width:700px){.sscpc-3d-logo{width:76vw;max-width:430px}}
+</style><style id="sscpc-cinematic-ui">
+/* SSCPC cinematic opening — reference-inspired layout */
+#sscpc-loader{position:fixed;inset:0;z-index:99999;background:#fff;display:grid;place-items:center;transition:opacity .9s cubic-bezier(.77,0,.18,1),visibility .9s;overflow:hidden}
+#sscpc-loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.sscpc-loader-dots{display:flex;align-items:center;gap:30px;transform:translateY(-2vh)}
+.sscpc-loader-dot{width:23px;height:23px;border-radius:50%;animation:sscpcDot 1.15s cubic-bezier(.4,0,.2,1) infinite;box-shadow:0 1px 3px rgba(0,0,0,.16)}
+.sscpc-loader-dot:nth-child(1){background:#8e0000;animation-delay:0s}.sscpc-loader-dot:nth-child(2){background:#b9b69a;animation-delay:.12s}.sscpc-loader-dot:nth-child(3){background:#11118c;animation-delay:.24s}
+@keyframes sscpcDot{0%,100%{transform:scale(.82);opacity:.55}45%{transform:scale(1.16);opacity:1}70%{transform:scale(.94);opacity:.8}}
+.sscpc-loader-school{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);text-align:center;color:#111;line-height:1}
+.sscpc-loader-school svg{display:block;width:86px;height:52px;margin:0 auto 5px}
+.sscpc-loader-school span{font:11px/1 "Share Tech Mono",monospace;letter-spacing:4px}
+.sscpc-loader-line{position:absolute;left:0;bottom:0;width:100%;height:2px;background:#eee}.sscpc-loader-line i{display:block;height:100%;width:0;background:#11118c;animation:sscpcLoad 3.4s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes sscpcLoad{to{width:100%}}
+
+/* Hero: deep navy, centered mark, camera reticle, restrained motion */
+.scroll-hero{height:100svh!important;min-height:680px!important;background:#07091a!important;color:#fff!important;position:relative!important;overflow:hidden!important}
+.scroll-hero .intro__pin,.scroll-hero .intro__stage{height:100%!important;min-height:100%!important}
+.scroll-hero .intro__stage{background:radial-gradient(circle at 50% 43%,rgba(28,35,82,.34),transparent 34%),linear-gradient(180deg,#080a1c 0%,#060817 100%)!important}
+.scroll-hero .intro__spot{display:none!important}
+.scroll-hero .intro__ring,.scroll-hero .intro__sig,.scroll-hero .intro__rows{display:none!important}
+.scroll-hero .intro__logo{position:absolute!important;left:50%!important;top:50%!important;width:min(430px,38vw)!important;height:min(430px,38vw)!important;transform:translate(-50%,-50%)!important;display:grid!important;place-items:center!important;z-index:5!important}
+.scroll-hero .sscpc-3d-logo{width:100%!important;height:100%!important;filter:drop-shadow(0 0 28px rgba(54,64,155,.2)) drop-shadow(0 25px 35px rgba(0,0,0,.5))!important;animation:sscpcHeroFloat 6s ease-in-out infinite!important}
+.scroll-hero .sscpc-3d-logo>img{transform:translateZ(30px)!important}
+.scroll-hero .sscpc-depth.d3{transform:translate3d(0,12px,-34px) scale(.955)!important}
+.scroll-hero .sscpc-depth.d2{transform:translate3d(0,8px,-22px) scale(.972)!important}
+.scroll-hero .sscpc-depth.d1{transform:translate3d(0,4px,-10px) scale(.988)!important}
+@keyframes sscpcHeroFloat{0%,100%{transform:translate3d(0,5px,0) rotateX(0deg) rotateY(0deg)}50%{transform:translate3d(0,-9px,0) rotateX(1.5deg) rotateY(-1.5deg)}}
+.scroll-hero .intro__reticle{position:absolute!important;left:50%!important;top:50%!important;width:min(510px,46vw)!important;height:min(510px,46vw)!important;transform:translate(-50%,-50%)!important;z-index:4!important;pointer-events:none!important}
+.scroll-hero .intro__reticle i{position:absolute!important;width:31px!important;height:31px!important;border-color:#ff3155!important;border-style:solid!important;opacity:.95!important;filter:drop-shadow(0 0 5px rgba(255,49,85,.25))}
+.scroll-hero .intro__reticle .tl{left:0!important;top:0!important;border-width:2px 0 0 2px!important}.scroll-hero .intro__reticle .tr{right:0!important;top:0!important;border-width:2px 2px 0 0!important}.scroll-hero .intro__reticle .bl{left:0!important;bottom:0!important;border-width:0 0 2px 2px!important}.scroll-hero .intro__reticle .br{right:0!important;bottom:0!important;border-width:0 2px 2px 0!important}
+.scroll-hero .intro__hint{position:absolute!important;left:50%!important;bottom:27px!important;top:auto!important;transform:translateX(-50%)!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:13px!important;z-index:8!important;color:#f4f4f4!important;opacity:1!important}
+.scroll-hero .intro__hint span{font:700 13px/1 "Share Tech Mono",monospace!important;letter-spacing:3px!important;text-transform:uppercase!important}
+.scroll-hero .intro__hint i{width:1px!important;height:29px!important;background:linear-gradient(#fff,transparent)!important;display:block!important;animation:sscpcScrollLine 1.6s ease-in-out infinite!important}
+@keyframes sscpcScrollLine{0%,100%{opacity:.25;transform:scaleY(.65);transform-origin:top}50%{opacity:1;transform:scaleY(1);transform-origin:top}}
+.sscpc-corner-glow{position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(circle at 50% 48%,rgba(30,40,100,.12),transparent 40%)}
+@media(max-width:700px){.scroll-hero{min-height:600px!important}.scroll-hero .intro__logo{width:72vw!important;height:72vw!important}.scroll-hero .intro__reticle{width:80vw!important;height:80vw!important}.scroll-hero .intro__reticle i{width:22px!important;height:22px!important}.sscpc-loader-dots{gap:23px}.sscpc-loader-dot{width:17px;height:17px}}
 </style></head>
-<body>
+<body><div id="sscpc-loader" aria-label="Loading SSCPC">
+  <div class="sscpc-loader-dots" aria-hidden="true"><i class="sscpc-loader-dot"></i><i class="sscpc-loader-dot"></i><i class="sscpc-loader-dot"></i></div>
+  <div class="sscpc-loader-school" aria-hidden="true">
+    <svg viewBox="0 0 100 62"><path d="M8 44 Q16 31 28 37 Q38 24 50 34 Q62 24 72 37 Q84 31 92 44 M20 43 L80 43 M50 8 L50 21 M46 12 L54 12 M43 16 L57 16 M38 21 L62 21" fill="none" stroke="#111" stroke-width="1.5"/><path d="M16 44 Q50 54 84 44" fill="none" stroke="#111" stroke-width="1.5"/></svg>
+    <span>SINCE 1945</span>
+  </div>
+  <div class="sscpc-loader-line"><i></i></div>
+</div>
 
 
 
@@ -589,5 +632,10 @@
 (()=>{const l=document.querySelector('.sscpc-3d-logo');if(!l)return;let px=innerWidth/2,py=innerHeight/2,pt=performance.now(),tm;
 const host=l.closest('section')||l.parentElement;
 host.addEventListener('pointermove',e=>{const now=performance.now(),dt=Math.max(16,now-pt),vx=(e.clientX-px)/dt,vy=(e.clientY-py)/dt,s=Math.hypot(vx,vy);l.style.transform=`rotateX(${-vy*10}deg) rotateY(${vx*10}deg) translateZ(${Math.min(24,s*80)}px)`;if(s>.06){l.classList.add('is-moving');clearTimeout(tm);tm=setTimeout(()=>l.classList.remove('is-moving'),180)}px=e.clientX;py=e.clientY;pt=now});
+})();
+</script><script id="sscpc-cinematic-loader-js">
+(()=>{const loader=document.getElementById('sscpc-loader');if(!loader)return;document.documentElement.classList.add('sscpc-loading');document.body.style.overflow='hidden';
+const done=()=>{if(loader.classList.contains('done'))return;loader.classList.add('done');document.body.style.overflow='';document.documentElement.classList.remove('sscpc-loading')};
+window.addEventListener('load',()=>setTimeout(done,1850),{once:true});setTimeout(done,3800);
 })();
 </script></body></html>
