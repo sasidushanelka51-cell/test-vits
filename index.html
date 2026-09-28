@@ -1,122 +1,578 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SSCPC — Photography Club</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap');
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:#080808;color:#f4f4f4;font-family:Inter,Arial,sans-serif;overflow-x:hidden}a{color:inherit;text-decoration:none}button{font:inherit}
-:root{--bg:#080808;--line:rgba(255,255,255,.15);--mono:'DM Mono',monospace}
-.intro{position:fixed;inset:0;z-index:1000;background:#fff;color:#111;display:grid;place-items:center;overflow:hidden;transform:translateY(0);transition:transform 1.15s cubic-bezier(.76,0,.24,1);will-change:transform}.intro.done{transform:translateY(-100%);pointer-events:none}.intro-center{position:relative;z-index:2;width:100%;height:100%;display:flex;align-items:center;justify-content:center}.loader-logo-spinner{position:relative;width:104px;height:104px;display:grid;place-items:center;transform:translateY(-2vh);animation:miniFloat 4s ease-in-out infinite;perspective:500px}
-.loader-mini-model{width:86px;height:86px;position:relative;transform-style:preserve-3d;animation:miniSpin 5s linear infinite}
-.loader-mini-model .mini-layer{position:absolute;inset:0;transform-style:preserve-3d}
-.loader-mini-model .mini-petal{position:absolute;left:50%;top:50%;width:52%;height:29%;transform-origin:8% 50%;border:1px solid rgba(0,0,0,.72);border-radius:100% 18% 72% 28%;clip-path:path("M 0 50 C 8 4, 40 0, 100 3 C 78 28, 70 68, 100 97 C 43 100, 10 95, 0 50 Z")}
-.loader-mini-model .mini-petal:nth-child(3n+1){background:#a90014}.loader-mini-model .mini-petal:nth-child(3n+2){background:#eee5bc}.loader-mini-model .mini-petal:nth-child(3n){background:#15387e}
-.loader-mini-model .mini-petal:nth-child(1){transform:translate(0,-50%) rotate(var(--a))}.loader-mini-model .mini-petal:nth-child(2){transform:translate(0,-50%) rotate(var(--a))}.loader-mini-model .mini-petal:nth-child(3){transform:translate(0,-50%) rotate(var(--a))}.loader-mini-model .mini-petal:nth-child(4){transform:translate(0,-50%) rotate(var(--a))}.loader-mini-model .mini-petal:nth-child(5){transform:translate(0,-50%) rotate(var(--a))}.loader-mini-model .mini-petal:nth-child(6){transform:translate(0,-50%) rotate(var(--a))}
-.loader-mini-model .mini-center{position:absolute;left:50%;top:50%;width:29%;height:29%;transform:translate(-50%,-50%) translateZ(14px);border-radius:50%;background:#202226;border:1px solid #555;display:grid;place-items:center;overflow:hidden;box-shadow:0 5px 16px rgba(0,0,0,.28)}
-.mini-crest{width:67%;height:auto}.mini-layer:nth-child(1){transform:translateZ(-14px) scale(.94);filter:brightness(.45)}.mini-layer:nth-child(2){transform:translateZ(-7px) scale(.97);filter:brightness(.68)}.mini-layer:nth-child(3){transform:translateZ(0)}
-@keyframes miniSpin{to{transform:rotateY(360deg) rotateZ(360deg)}}@keyframes miniFloat{50%{transform:translateY(calc(-2vh - 4px))}}.loader-logo{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);width:145px;height:auto;opacity:0;animation:logoIn 1s .45s forwards}.loader-caption{position:absolute;bottom:13px;left:50%;transform:translateX(-50%);font:500 8px var(--mono);letter-spacing:.25em;color:#111;opacity:0;animation:captionIn .8s .8s forwards;white-space:nowrap}@keyframes logoIn{to{opacity:1}}@keyframes captionIn{to{opacity:.7}}.loader-status{position:absolute;left:50%;bottom:83px;transform:translateX(-50%);font:500 8px var(--mono);letter-spacing:.22em;color:#999;text-transform:uppercase;opacity:.8}.loader-progress{position:absolute;left:0;bottom:0;width:100%;height:2px;background:#f0f0f0}.loader-progress i{display:block;width:0;height:100%;background:#111;animation:loadProgress 2.8s cubic-bezier(.65,0,.35,1) forwards}@keyframes loadProgress{to{width:100%}}
-.hero{min-height:100svh;position:relative;display:flex;flex-direction:column;overflow:hidden;background:#090909}.hero-bg{position:absolute;inset:0;background:radial-gradient(circle at 50% 47%,rgba(255,255,255,.09),transparent 17%),radial-gradient(circle at 15% 85%,rgba(255,255,255,.05),transparent 25%),linear-gradient(120deg,#111 0%,#070707 48%,#111 100%)}.hero-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 49.8%,rgba(255,255,255,.08) 50%,transparent 50.2%);opacity:.5}.topbar{position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:28px 4vw;font:500 10px var(--mono);letter-spacing:.16em}.brand{font-size:13px;font-weight:700;letter-spacing:.08em}.menu-btn{display:flex;align-items:center;gap:12px;border:0;background:none;color:#fff;cursor:pointer;text-transform:uppercase;letter-spacing:.2em;font:500 10px var(--mono)}.menu-lines{width:35px}.menu-lines span{display:block;height:1px;background:#fff;margin:6px 0;transition:.4s}.menu-btn.active .menu-lines span:first-child{transform:translateY(3.5px) rotate(45deg)}.menu-btn.active .menu-lines span:last-child{transform:translateY(-3.5px) rotate(-45deg)}
-.hero-copy{position:relative;z-index:5;flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 20px 120px}.eyebrow{font:500 11px var(--mono);letter-spacing:.35em;color:#aaa;margin-bottom:24px;opacity:0;animation:heroIn 1s 2.6s forwards}.hero h1{font-size:clamp(75px,17vw,260px);font-weight:900;line-height:.73;letter-spacing:-.095em;margin-left:-.08em;position:relative;opacity:0;animation:heroIn 1.2s 2.75s forwards}.hero h1 span{display:block}.hero h1 .outline{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.55)}@keyframes heroIn{to{opacity:1;transform:translateY(0)}}.hero-meta{position:absolute;bottom:36px;left:4vw;right:4vw;z-index:8;display:flex;justify-content:space-between;align-items:end;font:500 9px var(--mono);letter-spacing:.16em;color:#858585}.scroll{display:flex;align-items:center;gap:12px;color:#fff}.scroll i{width:45px;height:1px;background:#777;position:relative;overflow:hidden}.scroll i:after{content:"";position:absolute;width:18px;height:100%;background:#fff;animation:scrollLine 1.6s infinite}@keyframes scrollLine{0%{left:-20px}100%{left:50px}}.coord{line-height:1.8;text-align:right}
-.logo-stage{position:absolute;z-index:4;width:min(52vw,590px);height:min(52vw,590px);left:50%;top:50%;transform:translate(-50%,-50%);opacity:0;animation:modelIn 1.4s 1.15s cubic-bezier(.16,1,.3,1) forwards;perspective:1200px;transform-style:preserve-3d}
-@keyframes modelIn{from{opacity:0;transform:translate(-50%,-50%) scale(.55) rotateX(22deg) rotateZ(-18deg)}to{opacity:1;transform:translate(-50%,-50%) scale(1) rotateX(0) rotateZ(0)}}
-.logo-model{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform;animation:modelSpin 24s linear infinite;filter:drop-shadow(0 30px 45px rgba(0,0,0,.62))}
-@keyframes modelSpin{to{transform:rotateZ(360deg)}}
-.logo-layer{position:absolute;inset:0;transform-style:preserve-3d}
-.logo-layer.back{transform:translateZ(-30px) scale(.965);filter:brightness(.38) saturate(.8)}
-.logo-layer.mid{transform:translateZ(-15px) scale(.982);filter:brightness(.62)}
-.logo-layer.front{transform:translateZ(0)}
-.logo-petal{position:absolute;left:50%;top:50%;width:53%;height:30%;transform-origin:8% 50%;border:2px solid rgba(0,0,0,.72);border-radius:100% 18% 72% 28%;box-shadow:inset 0 0 20px rgba(255,255,255,.12),inset -14px -12px 24px rgba(0,0,0,.12);clip-path:path("M 0 50 C 8 4, 40 0, 100 3 C 78 28, 70 68, 100 97 C 43 100, 10 95, 0 50 Z")}
-.logo-petal:nth-child(1){background:linear-gradient(145deg,#c80016,#8f0010);transform:translate(0,-50%) rotate(-7deg)}
-.logo-petal:nth-child(2){background:linear-gradient(145deg,#f8f0c9,#d8ce9c);transform:translate(0,-50%) rotate(53deg)}
-.logo-petal:nth-child(3){background:linear-gradient(145deg,#173d8f,#0b245f);transform:translate(0,-50%) rotate(113deg)}
-.logo-petal:nth-child(4){background:linear-gradient(145deg,#b60015,#76000d);transform:translate(0,-50%) rotate(173deg)}
-.logo-petal:nth-child(5){background:linear-gradient(145deg,#f8f0c9,#d5ca98);transform:translate(0,-50%) rotate(233deg)}
-.logo-petal:nth-child(6){background:linear-gradient(145deg,#193e8e,#0a225b);transform:translate(0,-50%) rotate(293deg)}
-.logo-center{position:absolute;left:50%;top:50%;width:31%;height:31%;transform:translate(-50%,-50%) translateZ(24px);border-radius:50%;background:radial-gradient(circle at 35% 25%,#40454b,#17191c 52%,#08090a 100%);border:2px solid #555;box-shadow:0 0 0 7px #111,0 0 0 9px rgba(255,255,255,.22),0 18px 35px rgba(0,0,0,.55);display:grid;place-items:center;overflow:hidden}
-.model-crest{width:66%;height:auto;object-fit:contain;opacity:1;filter:drop-shadow(0 4px 5px rgba(0,0,0,.5))}
-.logo-trail{position:absolute;inset:0;pointer-events:none;opacity:0;transform-style:preserve-3d;filter:blur(10px);mix-blend-mode:screen}
-.logo-trail .logo-model{animation:none}
-.logo-trail.trail-a{transform:translate3d(-18px,0,-10px) scale(1.025);opacity:.28}
-.logo-trail.trail-b{transform:translate3d(18px,0,-20px) scale(1.045);opacity:.16;filter:blur(17px)}
-.logo-stage.motion .logo-trail{opacity:1}
-.logo-stage.motion .logo-model{animation-duration:7s}
-.logo-stage.motion .logo-center{box-shadow:0 0 0 7px #111,0 0 0 9px rgba(255,255,255,.22),0 0 45px rgba(255,255,255,.14)}
-.logo-stage.motion .logo-petal{box-shadow:inset 0 0 24px rgba(255,255,255,.15),inset -18px -14px 28px rgba(0,0,0,.16)}
-.logo-stage:after{content:"";position:absolute;inset:7%;border-radius:50%;border:1px solid rgba(255,255,255,.1);pointer-events:none}
-.focus-ring{position:absolute;left:50%;top:50%;border:1px solid rgba(255,255,255,.12);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}.r1{width:58%;height:58%;animation:pulse 3s infinite}.r2{width:78%;height:78%;animation:pulse 3s 1s infinite}.r3{width:98%;height:98%;animation:pulse 3s 2s infinite}@keyframes pulse{50%{opacity:.15;transform:translate(-50%,-50%) scale(1.035)}}
-.focus-ring{position:absolute;left:50%;top:50%;border:1px solid rgba(255,255,255,.12);border-radius:50%;transform:translate(-50%,-50%)}.r1{width:55%;height:55%;animation:pulse 3s infinite}.r2{width:76%;height:76%;animation:pulse 3s 1s infinite}.r3{width:98%;height:98%;animation:pulse 3s 2s infinite}@keyframes pulse{50%{opacity:.15;transform:translate(-50%,-50%) scale(1.035)}}.marker{position:absolute;z-index:7;color:#777;font:500 8px var(--mono);letter-spacing:.2em}.marker:before{content:"";display:inline-block;width:28px;height:1px;background:#555;vertical-align:middle;margin-right:9px}.m1{left:4vw;top:50%;transform:rotate(-90deg) translateX(-50%);transform-origin:left}.m2{right:4vw;top:50%;transform:rotate(90deg) translateX(50%);transform-origin:right}
-.marquee{position:absolute;bottom:9%;left:-2%;width:104%;z-index:6;overflow:hidden;white-space:nowrap;transform:rotate(-3deg);border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12);padding:12px 0;background:rgba(8,8,8,.35);backdrop-filter:blur(4px)}.track{display:inline-block;animation:marquee 28s linear infinite}.track span{font-size:clamp(22px,3.2vw,48px);font-weight:800;letter-spacing:-.04em;margin-right:40px}.track b{font-weight:400;color:#666}@keyframes marquee{to{transform:translateX(-50%)}}
-.menu-overlay{position:fixed;inset:0;z-index:500;background:#0a0a0a;transform:translateY(-100%);transition:transform .8s cubic-bezier(.76,0,.24,1);display:flex;align-items:center;justify-content:center;overflow:hidden}.menu-overlay.open{transform:translateY(0)}.menu-bg{position:absolute;inset:0;background:radial-gradient(circle at 70% 50%,#1c1c1c,transparent 35%)}.menu-inner{width:90%;position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:7vw}.menu-links a{display:block;font-size:clamp(42px,7vw,100px);font-weight:800;letter-spacing:-.07em;line-height:.95;border-bottom:1px solid #242424;padding:10px 0;transition:padding .35s,color .35s}.menu-links a:hover{padding-left:25px;color:#aaa}.menu-info{align-self:end;color:#777;font:500 10px var(--mono);letter-spacing:.16em;line-height:2}.close-label{position:absolute;right:4vw;top:30px;font:500 10px var(--mono);letter-spacing:.18em}
-.section{min-height:80vh;padding:120px 7vw;border-top:1px solid var(--line);background:#090909}.section-kicker{font:500 10px var(--mono);color:#777;letter-spacing:.2em;margin-bottom:25px}.section h2{font-size:clamp(50px,9vw,130px);letter-spacing:-.08em;line-height:.85;max-width:1000px}.section p{max-width:600px;margin-top:35px;color:#999;font-size:17px;line-height:1.8}
-@media(max-width:700px){.topbar{padding:22px 20px}.logo-stage{width:85vw;height:85vw}.hero h1{font-size:24vw}.hero-meta{left:20px;right:20px;bottom:25px}.m1,.m2{display:none}.coord{display:none}.menu-inner{grid-template-columns:1fr}.menu-info{display:none}.menu-links a{font-size:15vw}.marquee{bottom:13%}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
-</style>
+<html lang="en" class="on-home intro-pinned" data-theme="dark"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SSCPC – St. Sylvester's College Photography Club</title>
+<meta name="description" content="SSCPC, the St. Sylvester's College Photography Club. Home of Spectrum, our annual photography exhibition on 2 December 2026 at Cingolani Memorial Hall.">
+<link rel="canonical" href="https://sscpc.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SSCPC">
+<meta property="og:title" content="SSCPC – St. Sylvester's College Photography Club">
+<meta property="og:description" content="Photography club of St. Sylvester's College, Kandy. Home of Spectrum, our photography competition and exhibition. Albums, events, members and registration.">
+<meta property="og:url" content="https://sscpc.vercel.app/">
+<meta property="og:image" content="https://sscpc.vercel.app/images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SSCPC, St. Sylvester's College Photography Club">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SSCPC – St. Sylvester's College Photography Club">
+<meta name="twitter:description" content="Photography club of St. Sylvester's College, Kandy. Home of Spectrum, our photography competition and exhibition. Albums, events, members and registration.">
+<meta name="twitter:image" content="https://sscpc.vercel.app/images/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;family=Sacramento&amp;display=swap" rel="stylesheet">
+<link rel="icon" href="images/logo.png">
+<link rel="manifest" href="manifest.webmanifest"><!--pwa-->
+<meta name="theme-color" content="#0a0d26"><!--pwa-->
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><!--pwa-->
+<link rel="stylesheet" href="css/style.css">
+<script>document.documentElement.classList.add('loading');try{var t=localStorage.getItem('sscpc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<noscript><style>#loader{display:none}html.loading{overflow:auto}</style></noscript>
 </head>
 <body>
-<div class="intro" id="intro" aria-label="Loading SSCPC"><div class="intro-center"><div class="loader-logo-spinner" aria-label="SSCPC logo loading animation"><div class="loader-mini-model" id="loaderMiniModel"><div class="mini-layer"></div><div class="mini-layer"></div><div class="mini-layer"></div><div class="mini-center"></div></div></div><img class="loader-logo" alt="St. Sylvester's College since 1945" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJEAAABaCAYAAAC497RUAAAGpElEQVR42u1cPWwcRRh9hyLhVHaQJZwKpyIGIZwgFBsKoEA4DYlpcOSCuADSIMdV7M5UJA1KKIhRijhFyKWBiyhwoLELSIwUHJBMkgp3Oao4osBUS3GzeDyZ2d3Znd2dOb8nnW5vf+a++ebN9zM7M43+/n4QRBE8RRUQJBFBEhEkEUGQRARJRJBEBElEECQRQRIRJJGnOA8gEh+CJLLClvhMS+eGBZlaVI8ZDb6A/R86y7MK4EisK6qIligP2lQBSVQU8+L7BlVBEuXFmPg+RlUwJsobE+3QFVVES5QH+6iCdOyhCp6wNLJF2qQFoiUq6tIidMaKiC4nUVsKgMuIidaERXKBBQbW/qElZU6NEgjkMrCOujVID90SHbMkgoqDFs9FAO7TeXV/TDRiON8jri1g++VqBOCeZfnPK8/Ln1ZC/BRp5KE78wADAB5qzn8lLMwbHsv+QMhIEnmWSeXFDQAb6LzBbwNYNhD2TfHdBnDG4ZACSVQTlgC8k/HeFeHGmhXI1QPgNIDPMt4/1A1xVkgx0Skp/pAJNJPwzGNhQZoVybhlef89UZ+7JNFONIV7cIHzEnEuJtxjQq94drGioD5KsUImF/ayVM9hR/IsAJgNkUTHAbwP4Dnkn2J6V3p2OuXeOUNDnVDOfSCVOeGwvielcm8p11YNpDmXUuZaweGEWJ6PLdyqVyRqJVQqSy+ORK/UEeOo5vxZ8X1dkaGZ0OuvKan5JoC+jJamqTx7OcHijCjlxoTXWYcrAA4lDCfYkKdrAutN4Up0OCTFAD0A/jHcNyO5qijFNajpfqOkTM4244osZWokDF2MAritnOsD8Mggy024eR1UW2DdB2BvirmONAR6LBTZQPKqC7VB2hkatwFgvIS6XpHKtyXcqoZYD8W1UeXaLSlmivViItDeqghUVYqfZG1scSAhaJfJ9pZhvEeHYem7T5J5S8q4tkSM0hafrFlYLNMFkfrrYLI8eTCOGlamVDlOFJWsnBEpuE1qtKpwG3YrRY4D+NahK+3KcaKGIT56YLh/SnITrYyNFmMa9eNIjqQkru+U4Z4Vg0uudfS7jhHrqEQF+DTdIqqgjj7Us5YR6zIzpwvwA4vS8V/dTKC6LFHZCvHBGkUZk4Ei+toHdzMug7NEpgbuyqmjjgh0UKO7TV8qWPdbfDX9d9G76rZEaQOfocd6XlkioDPesiL9fuSgzCHp+GwNdZpwXJ5MoKM+mlpf5hNFSiA6EHDPXcb2rErdq4rgA2lfSeS64eskkav/HgPwve8E8sGdyRh3mPZPdUFALhPous+C+kSiFoDfpN9F3MCidFxXFuOy4Sd8JpGPc6xduYM6XNopbM/ADE32rrBEuuwqtM03LzruRP+GUGkfSaROCz2Zsxw5HQ5lsWBPym+SKCcBLucsY0k63qhY/ryBvTzweiIU8+sriZY0sUYRPFuBzPOGwD4rTiu/m6GQyOfFiy7GSaoMUKOAZN0VlkhnjYpi0OO6DiNg+L4Cdi6nixjTuIM/Yd7Rw8VH7QA2LnhNOp4JjUQhrMVPMvML6CzSCwlzePLFcNAbYIVAollUtJLTlzYhicq3Rra4KdzLMjqvQFyn+wMi3uoRGdoAOqtX8+AAqh+O2DUkaqKzxl/FKDqDk5uB6LtPxGunoV8NEuSeRdxRn+j67IwgiQiSiCBIIiJEEqWN5MYYS7j+heHaINI3cnrBQgaTvBGyb8uS5X905U/kKN9G/ihUEkUW559JKOcTw7OvZfj/dUvZTHC1o6tJnmsF9Llr3Jm66dNgyfWQCXZJ+v9GxkaZVJ7ZsKjnZIplBIAfLeVZt6y/Kn+jG0ikkmmjQBlZeuRP0vFHyrV3Peisixb3Dkjky4rPsXMPymAt0X6Nr3aF9QLPfpehd14tOZ64anFvvAT7U4tn5El3vSHHRG3ot40pUqEhyS2MZLj/kmfhgm3Hkq/PFwwh7oTsznS7feVdE3/fEHCb8KHh/NspcdlkSfGErmOZ9rG+k+LGowRd62Q+HGp2FgH4XRMHnClIyjScU2IKVa4f0JmUVjXWpcaPG9uki8MFdN5GjXBJoj/E90sAflF6zisFy3495fqsElPo4pv9Cc9/KcZuJoTVcoUXpeN4F1pT52ikZFiNlJhIrW9lGdoexwqLK/GqdP5vAL8WLPvnjBYrymnNepWxm0kAXzvSyzcA3gPwdAaXlsdKRymWuXRwKgjhZWBNkEQEQRIRJBFBEhEkEUGQRARJRJBEBElEECQRQRIRJBFBEhEESUTUgv8Ahu2m9qvglLcAAAAASUVORK5CYII="><div class="loader-caption">ST. SYLVESTER'S COLLEGE · KANDY</div><div class="loader-status" id="loaderStatus">INITIALIZING</div></div><div class="loader-progress"><i></i></div></div>
-<div class="menu-overlay" id="menu"><div class="menu-bg"></div><div class="close-label">ESC / CLOSE</div><div class="menu-inner"><nav class="menu-links"><a href="#home">HOME</a><a href="#about">ABOUT</a><a href="#gallery">GALLERY</a><a href="#spectrum">SPECTRUM</a><a href="#contact">CONTACT</a></nav><div class="menu-info">ST. SYLVESTER'S COLLEGE<br>KANDY · SRI LANKA<br><br>CAPTURE · CREATE · INSPIRE<br><br><span style="color:#eee">KEEP FOCUSING.</span></div></div></div>
-<main><section class="hero" id="home"><div class="hero-bg"></div><header class="topbar"><a class="brand" href="#home">SSCPC<span style="color:#666">/</span>26</a><button class="menu-btn" id="menuBtn" aria-label="Open menu">MENU <span class="menu-lines"><span></span><span></span></span></button></header><div class="marker m1">PHOTOGRAPHY CLUB</div><div class="marker m2">KANDY · SRI LANKA</div><div class="logo-stage" id="logoStage"><div class="focus-ring r1"></div><div class="focus-ring r2"></div><div class="focus-ring r3"></div><div class="logo-trail trail-a" id="trailA"></div><div class="logo-trail trail-b" id="trailB"></div><div class="logo-model" id="logoModel"><div class="logo-layer back"></div><div class="logo-layer mid"></div><div class="logo-layer front"></div><div class="logo-center" id="heroCrest"></div></div></div><div class="hero-copy"><div><div class="eyebrow">SINCE 1945 · SEE DIFFERENTLY</div><h1><span>CAPTURE</span><span class="outline">CREATE</span></h1></div></div><div class="marquee"><div class="track"><span>KEEP FOCUSING <b>✦</b></span><span>CAPTURE THE BEST <b>✦</b></span><span>TELL THE STORY <b>✦</b></span><span>KEEP FOCUSING <b>✦</b></span><span>CAPTURE THE BEST <b>✦</b></span><span>TELL THE STORY <b>✦</b></span></div></div><div class="hero-meta"><div class="scroll"><i></i> SCROLL TO EXPLORE</div><div class="coord">07°17' N<br>80°38' E</div></div></section>
-<section class="section" id="about"><div class="section-kicker">01 / ABOUT SSCPC</div><h2>EVERY FRAME<br><span style="color:#666">TELLS A STORY.</span></h2><p>The Photography Club of St. Sylvester's College brings together students who see the world differently — capturing moments, learning new techniques and turning experiences into visual stories.</p></section>
-<section class="section" id="gallery"><div class="section-kicker">02 / GALLERY</div><h2>MOMENTS<br>WE CAPTURE.</h2></section>
-<section class="section" id="spectrum"><div class="section-kicker">03 / SPECTRUM '26</div><h2>CAPTURE.<br>CREATE.<br><span style="color:#666">INSPIRE.</span></h2></section>
-<section class="section" id="contact"><div class="section-kicker">04 / CONTACT</div><h2>LET'S CREATE<br>SOMETHING.</h2><p>St. Sylvester's College, Kandy, Sri Lanka<br>sylvestrian.photography@gmail.com</p></section></main>
-<script>
-const intro=document.getElementById('intro'),menu=document.getElementById('menu'),menuBtn=document.getElementById('menuBtn');
-const logoStage=document.getElementById('logoStage'),logoModel=document.getElementById('logoModel'),heroCrest=document.getElementById('heroCrest'),loaderMini=document.getElementById('loaderMiniModel');
-const PETAL_COLORS=['red','cream','blue','red','cream','blue'];
-function fillLayer(layer){
-  PETAL_COLORS.forEach((color,i)=>{const p=document.createElement('div');p.className='logo-petal '+color;p.dataset.i=i;layer.appendChild(p)});
-}
-document.querySelectorAll('#logoModel .logo-layer').forEach(fillLayer);
-if(heroCrest){
-  const source=document.querySelector('.loader-logo');
-  if(source){const crest=source.cloneNode(true);crest.className='model-crest';heroCrest.appendChild(crest)}
-}
-function cloneModelIntoTrail(id){
-  const target=document.getElementById(id);
-  if(!target||!logoModel)return;
-  const clone=logoModel.cloneNode(true);
-  clone.removeAttribute('id');
-  clone.classList.add('trail-model');
-  target.appendChild(clone);
-}
-cloneModelIntoTrail('trailA');cloneModelIntoTrail('trailB');
-if(loaderMini){
-  const miniLayers=loaderMini.querySelectorAll('.mini-layer');
-  miniLayers.forEach((layer,idx)=>{
-    for(let i=0;i<6;i++){const p=document.createElement('span');p.className='mini-petal';p.style.setProperty('--a',i*60+'deg');p.style.setProperty('--c',PETAL_COLORS[i]);layer.appendChild(p)}
-    layer.style.transform='translateZ('+(-idx*7)+'px) scale('+(1-idx*.035)+')';
-  });
-  const source=document.querySelector('.loader-logo');
-  if(source){const crest=source.cloneNode(true);crest.className='mini-crest';loaderMini.querySelector('.mini-center').appendChild(crest)}
-}
 
-let introFinished=false;
-function finishIntro(){if(introFinished)return;introFinished=true;intro.classList.add('done');document.body.style.overflow='';}
-document.body.style.overflow='hidden';
-const loaderStatus=document.getElementById('loaderStatus');
-const statusSteps=['INITIALIZING','LOADING VISUALS','FOCUSING','READY'];
-statusSteps.forEach((step,i)=>setTimeout(()=>{if(loaderStatus)loaderStatus.textContent=step},[250,900,1650,2400][i]));
-window.addEventListener('load',()=>setTimeout(finishIntro,500));
-setTimeout(finishIntro,4200);
-function toggleMenu(open){menu.classList.toggle('open',open);menuBtn.classList.toggle('active',open);document.body.style.overflow=open?'hidden':''}
-menuBtn.addEventListener('click',()=>toggleMenu(!menu.classList.contains('open')));
-document.querySelectorAll('.menu-links a').forEach(a=>a.addEventListener('click',()=>toggleMenu(false)));
-document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleMenu(false)});
-window.addEventListener('resize',()=>{if(innerWidth<700){logoStage.style.marginLeft='';logoStage.style.marginTop=''}});
-const hero=document.querySelector('.hero');
-let lastX=innerWidth/2,lastY=innerHeight/2,lastT=performance.now(),motionTimer;
-hero.addEventListener('mousemove',e=>{
-  if(innerWidth<700)return;
-  const now=performance.now(),dt=Math.max(16,now-lastT),vx=(e.clientX-lastX)/dt,vy=(e.clientY-lastY)/dt,speed=Math.hypot(vx,vy);
-  const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;
-  logoStage.style.marginLeft=x*18+'px';logoStage.style.marginTop=y*18+'px';
-  logoStage.style.setProperty('--vx',vx.toFixed(2));logoStage.style.setProperty('--vy',vy.toFixed(2));
-  if(speed>.08){logoStage.classList.add('motion');clearTimeout(motionTimer);motionTimer=setTimeout(()=>logoStage.classList.remove('motion'),180)}
-  lastX=e.clientX;lastY=e.clientY;lastT=now;
-});
-hero.addEventListener('mouseleave',()=>{logoStage.style.marginLeft='';logoStage.style.marginTop='';logoStage.classList.remove('motion')});
-</script>
-</body>
-</html>
+
+
+<section class="scroll-hero" id="intro" aria-hidden="true">
+  <div class="intro__pin">
+    <div class="intro__stage" id="introStage" style="--siglen: 19024.361328125; --sigoff: 0.0; --lop: 0.000; --lbl: 14.00px; --lsc: 1.220; --sigop: 1; --rowsop: 0.995; --rowsy: 0.1px; --mx: 74.1%; --my: 73.3%; --lrx: 0.02deg; --lry: -0.02deg;">
+      <div class="intro__spot" id="introSpot" aria-hidden="true"></div>
+      <div class="intro__hint" id="introHint" aria-hidden="true" style="--hintop: 0;"><span>Scroll</span><i></i></div>
+
+      <div class="intro__logo" id="introLogo">
+        <svg class="intro__ring" viewBox="-100 -100 200 200" aria-hidden="true">
+          <g class="intro__ring-spin">
+            <circle r="97" fill="none" stroke="rgba(244,241,228,.4)" stroke-width=".7"></circle>
+            <circle r="90" fill="none" stroke="rgba(212,83,106,.65)" stroke-width=".8" stroke-dasharray="2 6"></circle>
+            <path transform="rotate(0)" d="M-8,-90 C38,-82 66,-52 70,-14 L14,-20 Z" fill="rgba(125,21,38,.6)"></path>
+            <path transform="rotate(60)" d="M-8,-90 C38,-82 66,-52 70,-14 L14,-20 Z" fill="rgba(29,38,96,.65)"></path>
+            <path transform="rotate(120)" d="M-8,-90 C38,-82 66,-52 70,-14 L14,-20 Z" fill="rgba(244,241,228,.14)"></path>
+            <path transform="rotate(180)" d="M-8,-90 C38,-82 66,-52 70,-14 L14,-20 Z" fill="rgba(125,21,38,.6)"></path>
+            <path transform="rotate(240)" d="M-8,-90 C38,-82 66,-52 70,-14 L14,-20 Z" fill="rgba(29,38,96,.65)"></path>
+            <path transform="rotate(300)" d="M-8,-90 C38,-82 66,-52 70,-14 L14,-20 Z" fill="rgba(244,241,228,.14)"></path>
+          </g>
+        </svg>
+        <img src="images/logo.png" alt="SSCPC" width="500" height="500" draggable="false">
+      </div>
+      <div class="intro__reticle" id="introReticle" aria-hidden="true" style="--rtop: 0; --rtx: 14.4px; --rty: 14.0px;">
+        <i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+      </div>
+      <div class="intro__flash" id="introFlash" aria-hidden="true"></div>
+
+      <div class="intro__sig" id="introSig" aria-hidden="true">
+        <svg viewBox="0 0 3560.6 711.4" xmlns="http://www.w3.org/2000/svg">
+          <path id="introSigPath" transform="translate(-27,711.4) scale(1,-1)" d="M356.9 424.4C239.9 443.3 198.7 457.2 198.7 494.4C198.7 528.1 225.4 570.7 343.4 570.7C488.1 570.7 509.6 498.6 509.6 450.0C563.2 450.0 669.3 450.0 669.3 450.0C669.3 556.6 615.1 708.7 343.4 708.7C115.0 708.7 41.8 594.6 41.8 495.7C41.8 367.7 135.8 324.3 345.0 293.5C482.2 273.2 530.0 265.0 530.0 217.4C530.0 163.1 482.1 136.6 367.1 136.6C276.2 136.6 183.2 153.1 183.2 258.8C97.1 258.8 58.6 258.8 27.0 258.8C27.0 191.1 26.9 3.1e-05 371.9 3.1e-05C576.5 3.1e-05 692.3 43.7 692.3 217.5C692.3 375.8 513.8 398.9 356.9 424.4Z M1076.9 424.4C959.9 443.3 918.7 457.2 918.7 494.4C918.7 528.1 945.4 570.7 1063.4 570.7C1208.1 570.7 1229.6 498.6 1229.6 450.0C1283.2 450.0 1389.3 450.0 1389.3 450.0C1389.3 556.6 1335.1 708.7 1063.4 708.7C835.0 708.7 761.8 594.6 761.8 495.7C761.8 367.7 855.8 324.3 1065.0 293.5C1202.2 273.2 1250.0 265.0 1250.0 217.4C1250.0 163.1 1202.1 136.6 1087.1 136.6C996.2 136.6 903.2 153.1 903.2 258.8C817.1 258.8 778.6 258.8 747.0 258.8C747.0 191.1 746.9 3.1e-05 1091.9 3.1e-05C1296.5 3.1e-05 1412.3 43.7 1412.3 217.5C1412.3 375.8 1233.8 398.9 1076.9 424.4Z M2008.3 266.4C1989.1 197.4 1938.6 155.3 1821.4 155.3C1701.7 155.3 1618.9 216.6 1618.9 355.7C1618.9 494.8 1701.7 556.2 1821.4 556.2C1934.4 556.2 1986.9 520.3 2008.8 445.0H2166.5C2156.9 594.2 2016.7 711.4 1821.4 711.4C1620.5 711.4 1467.0 585.7 1467.0 355.7C1467.0 121.4 1620.5 -3.1e-05 1821.4 -3.1e-05C2016.7 -3.1e-05 2152.7 110.1 2166.6 266.4H2008.3Z M2534.8 700.0C2493.3 700.0 2410.4 699.6 2373.2 699.4V700.0H2221.0V1.5e-05H2373.2V196.0C2404.8 196.0 2508.8 196.0 2534.4 196.0C2600.9 196.0 2833.4 186.6 2833.4 447.7C2833.4 699.3 2619.0 700.0 2534.8 700.0ZM2540.0 327.3C2526.7 327.3 2407.3 327.3 2373.2 327.3V568.5C2414.7 568.5 2514.4 568.5 2542.3 568.5C2593.1 568.5 2690.9 568.8 2690.9 448.0C2690.9 321.5 2580.4 327.3 2540.0 327.3Z M3429.3 266.4C3410.1 197.4 3359.6 155.3 3242.4 155.3C3122.7 155.3 3039.9 216.6 3039.9 355.7C3039.9 494.8 3122.7 556.2 3242.4 556.2C3355.4 556.2 3407.9 520.3 3429.8 445.0H3587.5C3577.9 594.2 3437.7 711.4 3242.4 711.4C3041.5 711.4 2888.0 585.7 2888.0 355.7C2888.0 121.4 3041.5 -3.1e-05 3242.4 -3.1e-05C3437.7 -3.1e-05 3573.7 110.1 3587.6 266.4H3429.3Z"></path>
+        </svg>
+      </div>
+
+      <div class="intro__rows" id="introRows" aria-hidden="true">
+        <div class="intro__row intro__row--a"><span>KEEP FOCUSING&nbsp; • &nbsp;KEEP FOCUSING&nbsp; • &nbsp;KEEP FOCUSING&nbsp; • &nbsp;KEEP FOCUSING&nbsp; • &nbsp;KEEP FOCUSING&nbsp; • &nbsp;</span><span>KEEP FOCUSING&nbsp; • &nbsp;KEEP FOCUSING&nbsp; • &nbsp;KEEP FOCUSING&nbsp; • &nbsp;KEEP FOCUSING&nbsp; • &nbsp;KEEP FOCUSING&nbsp; • &nbsp;</span></div>
+        <div class="intro__row intro__row--b"><span>CAPTURE THE BEST&nbsp; • &nbsp;CAPTURE THE BEST&nbsp; • &nbsp;CAPTURE THE BEST&nbsp; • &nbsp;CAPTURE THE BEST&nbsp; • &nbsp;CAPTURE THE BEST&nbsp; • &nbsp;</span><span>CAPTURE THE BEST&nbsp; • &nbsp;CAPTURE THE BEST&nbsp; • &nbsp;CAPTURE THE BEST&nbsp; • &nbsp;CAPTURE THE BEST&nbsp; • &nbsp;CAPTURE THE BEST&nbsp; • &nbsp;</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#home" id="brand-logo">
+      <span class="brand-ico fx-fine" id="brand-ico">
+        <img src="images/brand-photo.png" alt="" width="34" height="40" draggable="false">
+        <span class="brand-glint" aria-hidden="true"></span>
+        <span class="brand-ring" aria-hidden="true"></span>
+      </span>
+      SSCPC
+    </a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="menu" aria-label="Open menu" title="Menu">
+      <span class="bars" aria-hidden="true"><span class="bar"></span><span class="bar"></span><span class="bar"></span></span>
+    </button>
+    <ul class="menu" id="menu">
+      <li><a href="#home" class="on" aria-current="page">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#spectrum">Spectrum</a></li>
+      <li><a href="#members">Committee</a></li>
+      <li><a href="#join">Join Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a class="reg" href="#register">Register</a></li>
+    </ul>
+    <button class="theme" id="theme" type="button" aria-label="Switch to light mode" title="Switch to light mode">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+    </button>
+  </div>
+</nav>
+<div style="display: none;"></div><div class="pcd" id="pcd" role="status" aria-label="Time left until Spectrum">
+  <span class="pcd-label">Spectrum in</span>
+  <div class="pcd-nums">
+    <span><b id="pcd-d">64</b><i>d</i></span>
+    <span><b id="pcd-h">22</b><i>h</i></span>
+    <span><b id="pcd-m">17</b><i>m</i></span>
+    <span><b id="pcd-s">29</b><i>s</i></span>
+  </div>
+</div>
+
+<div class="view active" id="home">
+
+<section class="intro" aria-label="Welcome">
+  <div class="wrap intro-grid">
+    <h2 class="motto"><span>Capture.</span><span>Create.</span><span>Inspire.</span></h2>
+    <div class="intro-text">
+      <p>Welcome to the Photography Club of St. Sylvester's College — where moments become memories and creativity becomes a story.</p>
+      <p>Explore our photography, discover our events, celebrate the talent of our members, and see our school through a different lens.</p>
+      <p class="closer">Every frame has a story. We capture it. 📸</p>
+    </div>
+  </div>
+</section>
+</div>
+
+<main>
+  <section class="sec view" id="about">
+    <div class="wrap about2">
+      <div class="ab-hero">
+        <div class="ab-hero-copy">
+          <span class="ab-eyebrow">About SSCPC</span>
+          <h2>Where Every Frame Tells a Story</h2>
+          <p class="lead">The St. Sylvester's College Photography Club brings together students who see the world through a different lens — capturing moments, exploring creativity, and turning experiences into visual stories.</p>
+          <div class="ab-stats">
+            <div class="ab-stat"><b>50+</b><span>Members</span></div>
+            <div class="ab-stat"><b>81</b><span>Years</span></div>
+            <div class="ab-stat"><b>∞</b><span>Stories to Capture</span></div>
+          </div>
+          <div class="btns"><a class="btn cut" href="#join">Join SSCPC</a></div>
+        </div>
+        <div class="ab-collage">
+          <img class="ab-c1" src="images/about/hero-1-founders-flowers.jpg" alt="Students presenting flowers at Founder's Day">
+          <div class="ab-c2-wrap">
+            <img class="ab-c2" src="images/about/hero-2-founders-statue.jpg" alt="The statue of St. Sylvester overlooking Founder's Day">
+          </div>
+          <img class="ab-c3" src="images/about/hero-3-founders-blessing.jpg" alt="Blessing ceremony at Founder's Day">
+        </div>
+      </div>
+    </div>
+
+    <div class="ab-banner">
+      <img class="ab-banner-img" src="images/about/banner-cadets-haze.jpg" alt="Cadets marching through golden haze at the Interhouse Sports Meet">
+      <div class="ab-banner-in">
+        <h2>See More. Create More. Capture More.</h2>
+        <p>From the everyday moments of school life to the stories worth remembering, we turn what we see into something worth keeping.</p>
+        <div class="btns"><a class="btn ghost cut" href="#gallery">Explore Our Work</a></div>
+      </div>
+    </div>
+
+    <div class="wrap about2">
+      <div class="ab-feature">
+        <div class="ab-feature-collage">
+          <img class="ab-f1" src="images/about/feature-1-cricket.jpg" alt="Cricketer celebrating a wicket at the 36th One Day Encounter">
+          <img class="ab-f2" src="images/about/feature-2-dancer.jpg" alt="Traditional Kandyan dancer performing at Swarna Panhinda">
+          <div class="ab-mini-cards">
+            <div class="ab-mini"><b>Live Sports</b><p>Match days, close calls, the moments that decide games.</p></div>
+            <div class="ab-mini"><b>Cultural Events</b><p>Dance, music, and pageantry across the school calendar.</p></div>
+          </div>
+        </div>
+        <div class="ab-feature-copy">
+          <h2>Why Join SSCPC?</h2>
+          <p class="lead">Because a camera is more than a tool. It is a way to see, create, learn, and tell stories that might otherwise be forgotten.</p>
+          <ul class="ab-reasons">
+            <li>
+              <span class="ab-r-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"></path><circle cx="12" cy="13" r="3.4"></circle></svg></span>
+              <div><b>Learn Behind the Lens</b><p>Develop practical photography and videography skills through real experiences, workshops, and creative projects.</p></div>
+            </li>
+            <li>
+              <span class="ab-r-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z"></path><path d="M16 10.5 21 8v8l-5-2.5Z"></path></svg></span>
+              <div><b>Create Without Limits</b><p>Experiment with ideas, explore different styles, and turn your creativity into photographs and films.</p></div>
+            </li>
+            <li>
+              <span class="ab-r-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6"></path><circle cx="17.5" cy="9" r="2.4"></circle><path d="M16 14.3c2.9.4 5 2.5 5 5.7"></path></svg></span>
+              <div><b>Grow With Others</b><p>Learn from fellow creators, share ideas, collaborate on projects, and become part of a creative community.</p></div>
+            </li>
+          </ul>
+          <div class="btns"><a class="btn cut" href="#join">Join Us</a></div>
+        </div>
+      </div>
+
+      <div class="ab-moments">
+        <h3>Moments We've Captured</h3>
+        <p class="lead">A small slice of what our lenses have covered — musical evenings, match days, school ceremonies, and the everyday life in between.</p>
+        <div class="ab-moments-row">
+          <figure><img src="images/about/moment-violinist.jpg" alt="Violinist performing at Swara Ranjana"></figure>
+          <figure><img src="images/about/moment-vocalist-2.jpg" alt="Vocalist performing at Swara Ranjana"></figure>
+          <figure><img src="images/about/moment-band-parade.jpg" alt="Cadet band marching at the Annual Prize Giving"></figure>
+          <figure><img src="images/about/moment-ceremony.jpg" alt="Felicitation ceremony with traditional drummers"></figure>
+          <figure><img src="images/about/moment-meliora.jpg" alt="Meliora inter-school English day competition entries"></figure>
+          <figure><img src="images/about/moment-kids-prayer.jpg" alt="Junior students at a school observance"></figure>
+          <figure><img src="images/about/moment-dance-stage.jpg" alt="Kandyan dance performance on stage"></figure>
+        </div>
+      </div>
+
+      <div class="cta cut ab-follow ab-follow-border">
+        <h2>Follow Our Journey</h2>
+        <p>New albums, event highlights, and behind-the-scenes moments — posted as they happen.</p>
+        <div class="btns ab-social foot-social">
+          <a href="https://www.facebook.com/SSCKphotography" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 8.5H14a1 1 0 0 0-1 1V12h2.4l-.3 3H13v6h-3v-6H8v-3h2V9.2C10 6.9 11.7 5 14 5h1.5v3.5Z"></path></svg></a>
+          <a href="https://www.instagram.com/crownsmen_photography?stkn=MTFjN3J2NWJtbmkwZg==" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle class="dot" cx="17.3" cy="6.7" r=".9"></circle></svg></a>
+          <a href="https://whatsapp.com/channel/0029VaeL6UB9mrGdT1CwN41w" target="_blank" rel="noopener" aria-label="WhatsApp Channel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-4-1L4 20l1.2-4.3a8.4 8.4 0 0 1-1.2-4.2A8.5 8.5 0 1 1 21 11.5Z"></path><path d="M8.7 8.9c.2-.4.4-.4.6-.4h.4c.2 0 .3 0 .5.4l.6 1.4c.1.2 0 .3-.1.4l-.4.5c-.1.1-.1.2 0 .4.4.7 1.2 1.6 1.9 1.9.2.1.3.1.4 0l.5-.4c.1-.1.2-.1.4-.1l1.4.6c.3.1.3.3.3.5v.4c0 .3 0 .4-.4.6-1.3.5-2.9-.2-4.2-1.5-1.3-1.3-2-2.9-1.5-4.2Z" fill="none"></path></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec view" id="gallery">
+    <div class="wrap">
+      <h2>Gallery</h2>
+      <p class="lead">Explore moments captured through our lenses, from everyday school life to unforgettable events. Each photograph preserves a memory, tells a story, and reflects the unique perspectives of our members.</p>
+      <div id="albums">
+        <div class="filters" id="filters"></div>
+        <div class="albums-grid" id="albums-grid"><div class="aw"><button type="button" class="album" aria-label="Open album Meliora '26 Competitions"><span class="inner"><span class="tag">ALBUM 01</span><img alt="" src="images/albums/meliora-26-competitions/cover.jpg"><span class="holo"></span><span class="cap"><b>Meliora '26 Competitions</b><small>52 photos</small><em>Open album</em></span></span></button></div><div class="aw"><button type="button" class="album" aria-label="Open album රිදී පහන් වැට අද්දර කලා උලෙළ"><span class="inner"><span class="tag">ALBUM 02</span><img alt="" src="images/albums/kala-ulela-2026/cover.jpg"><span class="holo"></span><span class="cap"><b lang="si">රිදී පහන් වැට අද්දර කලා උලෙළ</b><small>05 photos</small><em>Open album</em></span></span></button></div><div class="aw"><button type="button" class="album" aria-label="Open album Vesters’ Soccer Carnival 2026"><span class="inner"><span class="tag">ALBUM 03</span><img alt="" src="images/albums/vesters-soccer-carnival-2026/cover.jpg"><span class="holo"></span><span class="cap"><b>Vesters’ Soccer Carnival 2026</b><small>04 photos</small><em>Open album</em></span></span></button></div><div class="aw"><button type="button" class="album" aria-label="Open album Annual Prize Giving 2025"><span class="inner"><span class="tag">ALBUM 04</span><img alt="" src="images/albums/annual-prize-giving-2025/cover.jpg"><span class="holo"></span><span class="cap"><b>Annual Prize Giving 2025</b><small>04 photos</small><em>Open album</em></span></span></button></div><div class="album-soon">More albums coming soon</div><div class="album-soon" hidden="">No albums match these filters</div></div>
+        <div class="viewer" id="viewer" hidden="">
+          <div class="viewer-head"><button class="btn ghost" id="back" type="button">Back to albums</button><h3 id="v-title"></h3><a class="btn ghost" id="v-fb" target="_blank" rel="noopener" hidden="">Full album on Facebook</a></div>
+          <div class="info" id="v-info" hidden=""></div>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+      </div>
+      <div class="cta cut" style="margin-top:3.5rem">
+        <h2>More on Facebook</h2>
+        <p>We publish the photographs we shoot at school events on our Facebook page. Follow it to see new albums as soon as they are posted.</p>
+        <div class="btns"><a class="btn cut" href="https://www.facebook.com/SSCKphotography" target="_blank" rel="noopener">Visit our Facebook page</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec view" id="spectrum">
+    <div class="wrap">
+      <h2>Spectrum</h2>
+      <p class="lead">A celebration of creativity, vision, and the art of photography. Spectrum brings together our finest work, giving our members a space to share their perspectives and showcase the stories they have captured.</p>
+      <div class="btns"><a class="btn ghost" href="#what-is-spectrum">What is Spectrum?</a></div>
+      <p class="tminus">T-minus</p>
+      <div class="cd" id="cd" role="timer" aria-label="Time left until Spectrum">
+        <div style="--p: 0.64;"><b id="cd-d">64</b><span>Days</span></div>
+        <div style="--p: 0.9166666666666666;"><b id="cd-h">22</b><span>Hrs</span></div>
+        <div style="--p: 0.2833333333333333;"><b id="cd-m">17</b><span>Min</span></div>
+        <div style="--p: 0.48333333333333334;"><b id="cd-s">29</b><span>Sec</span></div>
+      </div>
+      <p class="live" id="live" hidden="">Spectrum is happening now.</p>
+      <div id="events-list"><article class="info ev main"><div class="info-in"><div class="info-h">Main event<span class="ev-chip">Upcoming</span></div><h4 class="ev-name">Spectrum 2026</h4><p class="ev-type">Annual photography exhibition</p><ul class="info-list"><li><em>Date</em><span>Wednesday, 2 December 2026</span></li><li><em>Time</em><span>9:00 a.m. onwards</span></li><li><em>Venue</em><span>Cingolani Memorial Hall</span></li></ul><p class="ev-about">Photographs by club members are displayed together, and everyone is welcome to walk through and see the school through our lenses.</p><div class="ev-btns"><a class="btn cut" href="#register">Register to attend</a><details class="ev-cal"><summary class="btn ghost">Add to calendar</summary><div class="ev-cal-menu"><a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Spectrum%202026&amp;dates=20261202T033000Z/20261202T113000Z&amp;location=Cingolani%20Memorial%20Hall&amp;details=Organised%20by%20St.%20Sylvester's%20College%20Photography%20Club%20(SSCPC)" target="_blank" rel="noopener">Google Calendar</a><a href="#">Apple / Outlook (.ics)</a></div></details><a class="btn ghost" href="https://www.google.com/maps/dir/?api=1&amp;destination=Cingolani%20Memorial%20Hall%2C%20St.%20Sylvester%E2%80%99s%20College%2C%20Kandy" target="_blank" rel="noopener">Directions</a></div></div></article></div>
+    </div>
+    <div class="ticker" aria-hidden="true"><div class="track"><span>Capture</span><span>Create</span><span>Inspire</span><span>Capture</span><span>Create</span><span>Inspire</span><span>Capture</span><span>Create</span><span>Inspire</span><span>Capture</span><span>Create</span><span>Inspire</span><span>Capture</span><span>Create</span><span>Inspire</span><span>Capture</span><span>Create</span><span>Inspire</span></div></div>
+    <section class="ann" id="announcements" aria-label="Announcements" aria-roledescription="carousel">
+      <div class="wrap">
+        <div class="slider paused" id="ann-slider" style="--t: 6500ms;">
+          <div class="slider-in">
+            <div class="frame"><i></i><i></i><i></i><i></i><div class="stage"><div class="sl on" style="--img: url('images/announcements/be-ready.jpg');"><div class="pw" style="--ar: 0.8;"><img src="images/announcements/be-ready.jpg" alt="Spectrum 2026 poster: Be ready"></div></div><div class="sl" style="--img: url('images/announcements/submissions-open.jpg');"><div class="pw" style="--ar: 0.8;"><img src="images/announcements/submissions-open.jpg" alt="Spectrum 2026 poster: Submissions open"></div></div><div class="sl" style="--img: url('images/announcements/deadline-extended-30-sept.jpg');"><div class="pw has" style="--ar: 0.8;"><img src="images/announcements/deadline-extended-30-sept.jpg" alt="Spectrum 2026 poster: Deadline extended till 30th September"><button type="button" class="hint" aria-label="Show details" aria-expanded="false"></button><div class="cap"><button type="button" class="cap-x" aria-label="Close details">×</button><p><strong>Deadline extended!</strong><br>Don’t miss your chance to be part of Spectrum Photography Exhibition &amp; Competition.</p><p>Submit your best shots till <strong>30th September 2026</strong>. Capture the spectrum of life through your lens!</p><p>Rules and Regulations - <a href="https://ln.run/AWwL2" target="_blank" rel="noopener">ln.run/AWwL2</a></p><p>Submission Portal - <a href="https://forms.gle/7tU3csYh1q22Gk1X7" target="_blank" rel="noopener">forms.gle/7tU3csYh1q22Gk1X7</a></p><p>Inquiries:<br>Sasidu Shanelka (President) - <a href="tel:+94775312890">077 531 2890</a><br>Chethiya Sulakshana (Secretary) - <a href="tel:+94769110822">076 911 0822</a></p><p><strong>It’s All About Your Creativity.</strong></p><p><span class="tag">#spectrum</span><br><span class="tag">#sscpc</span></p></div></div></div><div class="sl" style="--img: url('images/announcements/crownsmen-wristband.jpg');"><div class="pw" style="--ar: 1;"><img src="images/announcements/crownsmen-wristband.jpg" alt="The official Crownsmen wristband, Rs. 400"></div></div></div><div class="scanl"></div></div>
+            <div class="s-bar">
+              <button class="lb-btn" id="ann-prev" type="button" aria-label="Previous announcement">‹</button>
+              <div class="segs"><button type="button" class="seg on" aria-label="Show announcement 1"><i></i></button><button type="button" class="seg" aria-label="Show announcement 2"><i></i></button><button type="button" class="seg" aria-label="Show announcement 3"><i></i></button><button type="button" class="seg" aria-label="Show announcement 4"><i></i></button></div>
+              <button class="lb-btn" id="ann-next" type="button" aria-label="Next announcement">›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="sec view" id="members">
+    <div class="wrap">
+      <h2>Committee</h2>
+      <p class="lead">Meet the students who lead, organize, and contribute to the journey of our Photography Club. Together, we work to create opportunities for learning, creativity, collaboration, and meaningful experiences.</p>
+
+      <div id="members-list"><h3 class="mem-group">Teacher in Charge</h3><div class="mem-grid"><article class="mc"><div class="mc-in"><div class="mc-photo none"></div><div class="mc-role">Teacher in Charge</div><div class="mc-name">Ven. Watagamuve Ananda Thero</div></div></article></div><h3 class="mem-group">Executive Committee 2026/27</h3><div class="mem-grid"><article class="mc" id="mem-sasidushanelka"><div class="mc-in"><div class="mc-photo"><img src="images/members/sasidu-shanelka.jpg" alt="Sasidu Shanelka" loading="lazy"></div><div class="mc-role">President</div><div class="mc-name">Sasidu Shanelka</div><div class="mc-grade">Grade 12</div></div></article><article class="mc" id="mem-chethiyasulakshana"><div class="mc-in"><div class="mc-photo"><img src="images/members/chethiya-sulakshana.jpg" alt="Chethiya Sulakshana" loading="lazy"></div><div class="mc-role">Secretary</div><div class="mc-name">Chethiya Sulakshana</div><div class="mc-grade">Grade 12</div></div></article><article class="mc" id="mem-nadeeshaambakotuwa"><div class="mc-in"><div class="mc-photo"><img src="images/members/nadeesha-ambakotuwa.jpg" alt="Nadeesha Ambakotuwa" loading="lazy"></div><div class="mc-role">Treasurer</div><div class="mc-name">Nadeesha Ambakotuwa</div><div class="mc-grade">Grade 12</div></div></article><article class="mc" id="mem-kushandananjaya"><div class="mc-in"><div class="mc-photo"><img src="images/members/kushan-dananjaya.jpg" alt="Kushan Dananjaya" loading="lazy"></div><div class="mc-role">Vice President</div><div class="mc-name">Kushan Dananjaya</div><div class="mc-grade">Grade 12</div></div></article><article class="mc" id="mem-ravinduwijesundara"><div class="mc-in"><div class="mc-photo none"></div><div class="mc-role">Assistant Secretary</div><div class="mc-name">Ravindu Wijesundara</div><div class="mc-grade">Grade 12</div></div></article><article class="mc" id="mem-navodniroshana"><div class="mc-in"><div class="mc-photo"><img src="images/members/navod-niroshana.jpg" alt="Navod Niroshana" loading="lazy"></div><div class="mc-role">Editor</div><div class="mc-name">Navod Niroshana</div><div class="mc-grade">Grade 13</div></div></article><article class="mc" id="mem-minindugunasekara"><div class="mc-in"><div class="mc-photo"><img src="images/members/minindu-gunasekara.jpg" alt="Minindu Gunasekara" loading="lazy"></div><div class="mc-role">Media Coordinator</div><div class="mc-name">Minindu Gunasekara</div><div class="mc-grade">Grade 12</div></div></article><article class="mc" id="mem-sanulaabeydeera"><div class="mc-in"><div class="mc-photo none"></div><div class="mc-role">Chief Organizer</div><div class="mc-name">Sanula Abeydeera</div><div class="mc-grade">Grade 12</div></div></article></div></div>
+
+      <div class="pres-msg-frame">
+        <div class="cta cut pres-msg">
+          <div class="pres-msg-photo">
+            <div class="pmp-panel">
+              <img src="images/members/sasidu-shanelka.png" alt="Sasidu Shanelka, President of SSCPC">
+            </div>
+          </div>
+          <div class="pres-msg-body">
+            <div class="pres-msg-head">
+              <span class="pmh-eyebrow">President's</span>
+              <span class="pmh-script">message</span>
+            </div>
+            <div class="pres-msg-cols">
+              <p>Photography is more than simply pressing a shutter. It is about learning to see — to notice the moments, emotions, people, and details that others may pass by. Every photograph has a story behind it, and every photographer has a unique way of telling that story.</p>
+              <p>As the President of the St. Sylvester’s College Photography Club, I am proud to be part of a community of students who share a passion for capturing and creating visual stories. Our club is a place where creativity meets learning, where beginners can discover their abilities, and where experienced members can continue to challenge themselves and grow.</p>
+              <p>Throughout our journey, we hope to create opportunities for every member to explore photography and videography in their own way. Through practical sessions, workshops, competitions, exhibitions, school events, creative projects, and collaboration, we want to turn our passion into skills that can be carried far beyond the classroom.</p>
+              <p>But a photography club is not built only around cameras and photographs. It is built around people. The ideas we share, the experiences we create together, the lessons we learn from one another, and the friendships we build along the way are what make this community meaningful.</p>
+              <p>I encourage every member to experiment without being afraid of mistakes. Try different perspectives. Explore new techniques. Tell stories that matter to you. Not every photograph needs to be perfect — sometimes the most valuable part is what you learn while creating it.</p>
+              <p>My vision for the club is to build a space where every student feels encouraged to create, contribute, and express themselves. I hope we can continue developing not only as photographers and videographers, but also as responsible, creative, and confident individuals.</p>
+              <p>Let us capture the moments of today, preserve the memories of our school, and create a visual legacy that future generations of St. Sylvester’s College can look back on with pride.<br>Keep creating. Keep exploring. Keep seeing the world differently.</p>
+            </div>
+            <p class="pres-msg-sign" aria-hidden="true">Sasidu Shanelka</p>
+            <p class="pres-msg-name">Sasidu Shanelka<span>President, SSCPC</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT HERE: Contact page. See README.txt -->
+  <section class="sec view" id="contact">
+    <div class="wrap">
+      <h2>Contact</h2>
+      <p class="lead">Have a question, an idea, or simply want to connect with us? Reach out to the Photography Club and stay connected with our activities, creative work, and upcoming opportunities.</p>
+
+      <div class="contact-layout">
+        <div class="contact-info">
+          <h3 class="contact-sub">Contact information</h3>
+          <ul class="contact-info-list">
+            <li>
+              <span class="ci-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5Z"></path><path d="M6 10.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"></path><path d="M22 8v6"></path></svg></span>
+              <span class="ci-body"><small>School</small><strong>St. Sylvester's College, Kandy</strong></span>
+            </li>
+            <li>
+              <span class="ci-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s7-6.1 7-12A7 7 0 0 0 5 10c0 5.9 7 12 7 12Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
+              <span class="ci-body"><small>Location</small><strong>St. Sylvester's College, Kandy, Sri Lanka</strong></span>
+            </li>
+            <li>
+              <span class="ci-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></span>
+              <span class="ci-body"><small>Email</small><a href="mailto:sylvestrian.photography@gmail.com">sylvestrian.photography@gmail.com</a></span>
+            </li>
+            <li>
+              <span class="ci-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2C9.6 21 3 14.4 3 6a2 2 0 0 1 1-2Z"></path></svg></span>
+              <span class="ci-body"><small>Phone</small><a href="tel:+94812223917">081 222 3917</a></span>
+            </li>
+            <li>
+              <span class="ci-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"></circle></svg></span>
+              <span class="ci-body"><small>Instagram</small><a href="https://www.instagram.com/crownsmen_photography?stkn=MTFjN3J2NWJtbmkwZg==" target="_blank" rel="noopener">crownsmen_photography</a></span>
+            </li>
+            <li>
+              <span class="ci-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 21v-7h2.5l.5-3H14V9c0-.9.3-1.5 1.6-1.5H17V4.8C16.7 4.7 15.8 4.6 14.8 4.6c-2.1 0-3.6 1.3-3.6 3.7V11H9v3h2.2v7Z"></path></svg></span>
+              <span class="ci-body"><small>Facebook</small><a href="https://www.facebook.com/SSCKphotography" target="_blank" rel="noopener">SSCPC Photography</a></span>
+            </li>
+            <li>
+              <span class="ci-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-8.4 8.4 8.3 8.3 0 0 1-3.8-.9L3 21l1.9-5.7a8.3 8.3 0 0 1-.9-3.8A8.4 8.4 0 0 1 12.4 3h.1a8.5 8.5 0 0 1 8.5 8.4Z"></path></svg></span>
+              <span class="ci-body"><small>WhatsApp</small><a href="https://whatsapp.com/channel/0029VaeL6UB9mrGdT1CwN41w" target="_blank" rel="noopener">Follow the channel</a></span>
+            </li>
+          </ul>
+          <p class="contact-note">Club committee -- President Sasidu Shanelka (<a href="tel:+94775312890">077 531 2890</a>), Secretary Chethiya Sulakshana (<a href="tel:+94769110822">076 911 0822</a>).</p>
+        </div>
+
+        <div class="info contact-form-wrap">
+          <div class="info-in">
+            <div class="info-h">Send a message</div>
+            <form class="reg-form" id="contact-form" name="contact-message" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+              <input type="hidden" name="form-name" value="contact-message">
+              <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+              <label class="fld full"><span>Full name</span><input name="name" placeholder="e.g. Kasun Perera" required="" autocomplete="name"></label>
+              <label class="fld full"><span>Email</span><input type="email" name="email" placeholder="e.g. name@gmail.com" required="" autocomplete="email"></label>
+              <label class="fld full"><span>Subject</span><input name="subject" placeholder="e.g. Question about Spectrum" required=""></label>
+              <label class="fld full"><span>Message</span><textarea name="message" placeholder="Write your message here..." required=""></textarea></label>
+              <div class="full"><button class="btn cut" type="submit" id="contact-btn">Send Message</button></div>
+              <div class="reg-msg full" id="contact-msg" role="status" hidden=""></div>
+            </form>
+            <div class="join-done" id="contact-done" hidden="">
+              <p class="reg-msg" id="contact-status" role="status"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-map-wrap">
+        <h3 class="contact-sub">Location</h3>
+        <div class="contact-map">
+          <iframe src="https://maps.google.com/maps?q=St.%20Sylvester%27s%20College%2C%20Kandy%2C%20Sri%20Lanka&amp;z=16&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map showing St. Sylvester's College, Kandy"></iframe>
+        </div>
+        <a class="btn ghost" href="https://www.google.com/maps/dir/?api=1&amp;destination=St.+Sylvester%27s+College%2C+Kandy%2C+Sri+Lanka" target="_blank" rel="noopener">Get directions</a>
+      </div>
+    </div>
+  </section>
+  <section class="sec view" id="register">
+    <div class="wrap">
+      <h2>Register</h2>
+      <p class="lead">Visitor registration for invited schools. Spectrum 2026 is on 2 December 2026, from 9:00 a.m., at Cingolani Memorial Hall. One teacher can register a whole group: just enter how many students are coming.</p>
+      <div class="info" style="margin-top:2rem">
+        <div class="info-in">
+          <div class="info-h">Visitor registration</div>
+          <form class="reg-form" id="reg-form" name="spectrum-registration" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="spectrum-registration">
+            <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+            <label class="fld full"><span>School name</span><input name="school" placeholder="e.g. Central College, Kandy" required="" autocomplete="organization"></label>
+            <label class="fld"><span>Master in charge name</span><input name="mic_name" placeholder="e.g. Nimal Perera" required="" autocomplete="name"></label>
+            <label class="fld"><span>Master in charge telephone number</span><input type="tel" name="mic_phone" placeholder="e.g. 077 123 4567" required="" autocomplete="tel"></label>
+            <label class="fld"><span>Club email</span><input type="email" name="email" placeholder="e.g. club@gmail.com" required="" autocomplete="email"></label>
+            <label class="fld"><span>President's phone / WhatsApp</span><input type="tel" name="phone" placeholder="e.g. 077 123 4567" required="" autocomplete="tel"></label>
+            <label class="fld"><span>Students attending</span><input type="number" name="students" id="reg-students" placeholder="e.g. 15" min="0" required=""></label>
+            <label class="fld"><span>Teachers attending</span><input type="number" name="teachers" placeholder="e.g. 2" min="0" required=""></label>
+            <div class="fld full" id="reg-student-names-wrap" hidden="">
+              <span>Student names</span>
+              <p class="reg-help">Example: 1. Kamal Perera &nbsp; 2. Nimal Silva &nbsp; 3. Sahan Fernando</p>
+              <div id="reg-student-names"></div>
+              <p class="reg-help" id="reg-names-count" aria-live="polite"></p>
+            </div>
+            <label class="fld full"><span>Message (optional)</span><textarea name="message" id="reg-message" placeholder="e.g. We will arrive around 9.30 a.m. with our school photography society."></textarea></label>
+            <label class="chk full"><input type="checkbox" id="reg-message-none" name="message_none"><span>None / No message</span></label>
+            <label class="chk full"><input type="checkbox" name="confirm" required=""><span>I confirm that the details above are correct and that I am registering on behalf of my school.</span></label>
+            <div class="full"><button class="btn cut" type="submit" id="reg-btn">Submit registration</button></div>
+            <div class="reg-msg full" id="reg-msg" role="status" hidden=""></div>
+            <p class="reg-note full">Your details go only to the exhibition organisers.</p>
+          </form>
+          <div class="join-done" id="reg-done" hidden="">
+            <p class="reg-msg" id="reg-status" role="status"></p>
+            <div class="btns">
+              <a class="btn cut" id="reg-dl">Download PDF</a>
+              <button class="btn cut" type="button" id="reg-share" hidden="">Share PDF on WhatsApp</button>
+              <a class="btn ghost" id="reg-wa" target="_blank" rel="noopener">Message the president on WhatsApp</a>
+            </div>
+            <p class="reg-note" style="margin-top:1rem">Please send your registration to the president: tap "Share PDF on WhatsApp" and choose the president's chat. If that button is missing, download the PDF and attach it in the president's WhatsApp chat.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sec view" id="join">
+    <div class="wrap">
+      <h2>Join Us</h2>
+      <p class="lead">Have a passion for photography, videography, or visual creativity? Join us, develop your skills, share your ideas, and become part of a community that learns, creates, and captures moments together.</p>
+      <div class="info" style="margin-top:2rem">
+        <div class="info-in">
+          <div class="info-h">Membership application</div>
+          <form class="reg-form" id="join-form" name="join-application" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="join-application">
+            <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+            <label class="fld full"><span>Full name</span><input name="name" placeholder="e.g. Kasun Perera" required="" autocomplete="name"></label>
+            <label class="fld"><span>Grade</span><select name="grade" required=""><option value="">Select</option><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option><option>Grade 13</option></select></label>
+            <label class="fld"><span>Admission number</span><input name="admission" placeholder="e.g. 12345" required=""></label>
+            <label class="fld"><span>Phone / WhatsApp</span><input type="tel" name="phone" placeholder="e.g. 077 123 4567" required="" autocomplete="tel"></label>
+            <label class="fld"><span>Email (optional)</span><input type="email" name="email" placeholder="e.g. name@gmail.com" autocomplete="email"></label>
+            <label class="fld"><span>Parent / guardian name (optional)</span><input name="guardian" placeholder="e.g. Sunil Perera"></label>
+            <label class="fld"><span>Parent / guardian phone (optional)</span><input type="tel" name="guardian_phone" placeholder="e.g. 071 234 5678"></label>
+            <label class="fld"><span>Photography experience</span><select name="experience" required=""><option value="">Select</option><option>Beginner</option><option>Some experience</option><option>Experienced</option></select></label>
+            <label class="fld"><span>Equipment</span><select name="equipment" required=""><option value="">Select</option><option>Phone only</option><option>Camera</option><option>Camera and phone</option><option>None yet</option></select></label>
+            <fieldset class="grp full"><legend>Interests</legend><div class="opts">
+              <label><input type="checkbox" name="interests" value="Portraits">Portraits</label>
+              <label><input type="checkbox" name="interests" value="School events">School events</label>
+              <label><input type="checkbox" name="interests" value="Nature">Nature</label>
+              <label><input type="checkbox" name="interests" value="Street">Street</label>
+              <label><input type="checkbox" name="interests" value="Photo editing">Photo editing</label>
+              <label><input type="checkbox" name="interests" value="Videography">Videography</label>
+            </div></fieldset>
+            <label class="fld full"><span>Why do you want to join?</span><textarea name="why" id="join-why" placeholder="e.g. I love taking nature photos and want to learn editing and join the team at school events." required=""></textarea></label>
+            <label class="chk full"><input type="checkbox" id="join-why-none" name="why_none"><span>None / Prefer not to say</span></label>
+            <label class="chk full"><input type="checkbox" name="confirm" required=""><span>I confirm that the details above are correct.</span></label>
+            <p class="reg-msg full" id="join-confirm-msg" role="status" hidden=""></p>
+            <div class="full"><button class="btn cut" type="submit" id="join-btn">Submit application</button></div>
+          </form>
+          <div class="join-done" id="join-done" hidden="">
+            <p class="reg-msg" id="join-status" role="status"></p>
+            <div class="btns">
+              <a class="btn cut" id="join-dl">Download PDF</a>
+              <button class="btn cut" type="button" id="join-share" hidden="">Share PDF on WhatsApp</button>
+              <a class="btn ghost" id="join-wa" target="_blank" rel="noopener">Message the president on WhatsApp</a>
+            </div>
+            <p class="reg-note" style="margin-top:1rem">To send the PDF, tap "Share PDF on WhatsApp" and choose the president's chat. If that button is missing, download the PDF and attach it in the president's WhatsApp chat.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sec view" id="what-is-spectrum">
+    <div class="wrap">
+      <h2>What is Spectrum</h2>
+      <article class="info spec-card"><div class="info-in">
+        <div class="info-h">The event</div>
+        <h3 class="spec-h">Spectrum</h3>
+        <p><strong>Spectrum</strong> is the flagship photography event organized by the <strong>Photography Club of St. Sylvester’s College, Kandy</strong>. The event begins with an island-wide <strong>online photography competition</strong>, where participants submit their photographs through a Google Form under various categories. The selected and winning photographs are then showcased at a photography exhibition held at the college premises during the main event.</p>
+        <p>The Photography Day features an exhibition, an interactive session conducted by <strong>two renowned professional photographers</strong> serving as the Chief Guest and Guest of Honour, and a certificate award ceremony recognizing the competition winners. Souvenirs are also presented to the distinguished <strong>guests, the Principal, the MIC, and past presidents</strong> of the Photography Club. Through this event, Spectrum aims to celebrate creativity, encourage young photographers across Sri Lanka, and promote the art of photography within the school community.</p>
+      </div></article>
+      <article class="info spec-card"><div class="info-in">
+        <div class="info-h">Competition</div>
+        <h3 class="spec-h">Online Photography Competition</h3>
+        <p>The Spectrum <strong>Online Photography Competition</strong> is an <strong>island-wide inter-school</strong> photography competition open to students from schools across <strong>Sri Lanka</strong>. The competition features <strong>five categories: Colour, Monochrome, Nature, Wildlife, and Mobile</strong> photography. Each participant may submit up to <strong>three</strong> photographs in each category.</p>
+        <p>The competition commenced on <strong>14 August</strong> and will remain open until <strong>30 September</strong> (extended from 20 September). A total of eight winners will be selected, including 1st place, 2nd place, 3rd place, and five merit award recipients. The winning and selected photographs will be displayed at the Spectrum Photography Exhibition, and the winners will be recognized during the certificate award ceremony held on the main Photography Day.</p>
+      </div></article>
+      <article class="info spec-card"><div class="info-in">
+        <div class="info-h">Exhibition</div>
+        <h3 class="spec-h">Photography Exhibition</h3>
+        <p>The Spectrum Photography Exhibition is the main highlight of Spectrum Photography Day, held on <strong>14 October 2026</strong> at the Open Hall of St. Sylvester’s College, Kandy. The exhibition will feature the winning and selected photographs from the Spectrum island-wide inter-school photography competition, as chosen by the official judging panel. Students, participants, guests, and visitors will have the opportunity to view the exhibition throughout the event, celebrating the creativity and talent of young photographers from across Sri Lanka.</p>
+      </div></article>
+      <article class="info spec-card"><div class="info-in">
+        <div class="info-h">Main event</div>
+        <h3 class="spec-h">The Photography Day</h3>
+        <p>The Spectrum Photography Day will be held on <strong>14 October</strong> at the <strong>Cingolani Memorial Hall, St. Sylvester’s College, Kandy</strong>. The event will serve as the main celebration of Spectrum, bringing together students, participants, and distinguished guests for a day dedicated to the art of photography.</p>
+        <p>The programme will feature a photography exhibition showcasing selected and winning photographs from the island-wide online competition, <strong>educational lectures and interactive sessions</strong> conducted by two renowned professional photographers serving as the Chief Guest and Guest of Honour, and a certificate award ceremony recognizing the competition winners. The guest lectures will provide valuable insights into photography techniques, creativity, visual storytelling, and career opportunities in the field of photography. Souvenirs will also be presented to the distinguished guests, the Principal, the MIC, and past presidents of the Photography Club.</p>
+      </div></article>
+      <div class="btns"><a class="btn cut" href="#register">Register to attend</a><a class="btn ghost" href="#spectrum">Back to Spectrum</a></div>
+    </div>
+  </section>
+</main>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden="">
+  <div class="pv-top">
+    <span class="pv-play"><i></i>Play</span>
+    <span class="pv-title" id="lb-t"></span>
+    <button class="lb-btn" id="lb-x" aria-label="Close">×</button>
+  </div>
+  <div class="pv-stage">
+    <button class="lb-btn" id="lb-p" aria-label="Previous photo">‹</button>
+    <div class="pv-frame"><i></i><i></i><i></i><i></i><img id="lb-img" alt=""></div>
+    <button class="lb-btn" id="lb-n" aria-label="Next photo">›</button>
+  </div>
+  <div class="pv-bottom">
+    <span id="lb-c"></span>
+    <div class="pv-ticks" id="lb-ticks" aria-hidden="true"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div class="foot-col foot-brand">
+      <a class="foot-logo" href="#home">
+        <img src="images/school-crest.png" alt="St. Sylvester's College crest" width="34" height="52" class="foot-crest">
+        <img src="images/logo.png" alt="" width="40" height="40">
+        <span>SSCPC</span>
+      </a>
+      <p>The Photography Club of St. Sylvester's College — capturing our school's story, one frame at a time. Home of Spectrum, our island-wide photography competition and exhibition.</p>
+      <ul class="foot-contact">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.1 7-12A7 7 0 0 0 5 10c0 5.9 7 12 7 12Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span>St. Sylvester's College, Kandy, Sri Lanka</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2C9.6 21 3 14.4 3 6a2 2 0 0 1 1-2Z"></path></svg><a href="tel:+94812223917">081 222 3917</a></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg><a href="mailto:sylvestrian.photography@gmail.com">sylvestrian.photography@gmail.com</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Quick Links</h4>
+      <ul class="foot-nav">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#spectrum">Spectrum</a></li>
+        <li><a href="#members">Committee</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Connect</h4>
+      <p>Join our digital community and see new albums as soon as they're posted.</p>
+      <div class="foot-social">
+        <a href="https://www.instagram.com/crownsmen_photography?stkn=MTFjN3J2NWJtbmkwZg==" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle class="dot" cx="17.3" cy="6.7" r=".9"></circle></svg></a>
+        <a href="https://www.facebook.com/SSCKphotography" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 8.5H14a1 1 0 0 0-1 1V12h2.4l-.3 3H13v6h-3v-6H8v-3h2V9.2C10 6.9 11.7 5 14 5h1.5v3.5Z"></path></svg></a>
+        <a href="https://whatsapp.com/channel/0029VaeL6UB9mrGdT1CwN41w" target="_blank" rel="noopener" aria-label="WhatsApp Channel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-4-1L4 20l1.2-4.3a8.4 8.4 0 0 1-1.2-4.2A8.5 8.5 0 1 1 21 11.5Z"></path><path d="M8.7 8.9c.2-.4.4-.4.6-.4h.4c.2 0 .3 0 .5.4l.6 1.4c.1.2 0 .3-.1.4l-.4.5c-.1.1-.1.2 0 .4.4.7 1.2 1.6 1.9 1.9.2.1.3.1.4 0l.5-.4c.1-.1.2-.1.4-.1l1.4.6c.3.1.3.3.3.5v.4c0 .3 0 .4-.4.6-1.3.5-2.9-.2-4.2-1.5-1.3-1.3-2-2.9-1.5-4.2Z" fill="none"></path></svg></a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <p>© 2026 SSCPC · St. Sylvester's College Photography Club. All rights reserved.</p>
+    <p class="dev">Developed by <a class="name-btn" href="#members">SSCPC Crew</a></p>
+    <div class="pcd-slot" id="pcd-slot" aria-hidden="true"></div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/app.js"></script>
+<script src="js/logo-fx.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/events.js"></script>
+<script src="js/members.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/join.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/register.js"></script>
+<script src="js/slider.js"></script>
+<script src="js/countdown-dock.js"></script>
+<script src="js/intro.js"></script>
+<script src="js/router.js"></script>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)}</script><!--vercel-->
+<script defer="" src="/_vercel/insights/script.js"></script><!--vercel-->
+
+
+</body></html>
