@@ -20,14 +20,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;family=Sacramento&amp;display=swap" rel="stylesheet">
-<link rel="icon" href="images/logo.png">
+<link rel="icon" href="assets/sscpc-logo.webp">
 <link rel="manifest" href="manifest.webmanifest"><!--pwa-->
 <meta name="theme-color" content="#0a0d26"><!--pwa-->
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><!--pwa-->
 <link rel="stylesheet" href="css/style.css">
 <script>document.documentElement.classList.add('loading');try{var t=localStorage.getItem('sscpc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <noscript><style>#loader{display:none}html.loading{overflow:auto}</style></noscript>
-</head>
+<style id="sscpc-logo-motion">
+.sscpc-3d-logo{position:relative;width:min(44vw,560px);aspect-ratio:1;display:grid;place-items:center;transform-style:preserve-3d;perspective:1200px;filter:drop-shadow(0 28px 40px rgba(0,0,0,.45));will-change:transform}
+.sscpc-3d-logo>img{position:relative;z-index:6;width:100%;height:100%;object-fit:contain;transform:translateZ(28px);backface-visibility:hidden;will-change:transform,filter}
+.sscpc-depth,.sscpc-trail{position:absolute;inset:0;background:url("assets/sscpc-logo.webp") center/contain no-repeat;pointer-events:none;transform-style:preserve-3d}
+.sscpc-depth{z-index:2;filter:brightness(.35) saturate(.8);opacity:.9}
+.sscpc-depth.d3{transform:translateZ(-28px) scale(.965)}.sscpc-depth.d2{transform:translateZ(-18px) scale(.978)}.sscpc-depth.d1{transform:translateZ(-8px) scale(.99);filter:brightness(.55)}
+.sscpc-trail{z-index:1;opacity:0;filter:blur(11px);mix-blend-mode:screen}.sscpc-trail.t1{transform:translate3d(-20px,0,-18px) scale(1.02);opacity:.2}.sscpc-trail.t2{transform:translate3d(20px,0,-28px) scale(1.04);opacity:.12;filter:blur(18px)}
+.sscpc-3d-logo.is-moving>img{filter:blur(.8px) brightness(1.06);transform:translateZ(30px) scale(1.018)}.sscpc-3d-logo.is-moving .sscpc-trail{opacity:1}
+@keyframes sscpcLogoFloat{50%{transform:translateY(-8px) rotateX(2deg) rotateY(-2deg)}}.sscpc-3d-logo{animation:sscpcLogoFloat 5s ease-in-out infinite}
+@media(max-width:700px){.sscpc-3d-logo{width:76vw;max-width:430px}}
+</style></head>
 <body>
 
 
@@ -51,7 +61,7 @@
             <path transform="rotate(300)" d="M-8,-90 C38,-82 66,-52 70,-14 L14,-20 Z" fill="rgba(244,241,228,.14)"></path>
           </g>
         </svg>
-        <img src="images/logo.png" alt="SSCPC" width="500" height="500" draggable="false">
+        <div class="sscpc-3d-logo" aria-label="SSCPC logo"><span class="sscpc-depth d3"></span><span class="sscpc-depth d2"></span><span class="sscpc-depth d1"></span><img src="assets/sscpc-logo.webp" alt="SSCPC" width="500" height="500" draggable="false"><span class="sscpc-trail t1"></span><span class="sscpc-trail t2"></span></div>
       </div>
       <div class="intro__reticle" id="introReticle" aria-hidden="true" style="--rtop: 0; --rtx: 14.4px; --rty: 14.0px;">
         <i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
@@ -518,7 +528,7 @@
     <div class="foot-col foot-brand">
       <a class="foot-logo" href="#home">
         <img src="images/school-crest.png" alt="St. Sylvester's College crest" width="34" height="52" class="foot-crest">
-        <img src="images/logo.png" alt="" width="40" height="40">
+        <img src="assets/sscpc-logo.webp" alt="" width="40" height="40">
         <span>SSCPC</span>
       </a>
       <p>The Photography Club of St. Sylvester's College — capturing our school's story, one frame at a time. Home of Spectrum, our island-wide photography competition and exhibition.</p>
@@ -575,4 +585,9 @@
 <script defer="" src="/_vercel/insights/script.js"></script><!--vercel-->
 
 
-</body></html>
+<script>
+(()=>{const l=document.querySelector('.sscpc-3d-logo');if(!l)return;let px=innerWidth/2,py=innerHeight/2,pt=performance.now(),tm;
+const host=l.closest('section')||l.parentElement;
+host.addEventListener('pointermove',e=>{const now=performance.now(),dt=Math.max(16,now-pt),vx=(e.clientX-px)/dt,vy=(e.clientY-py)/dt,s=Math.hypot(vx,vy);l.style.transform=`rotateX(${-vy*10}deg) rotateY(${vx*10}deg) translateZ(${Math.min(24,s*80)}px)`;if(s>.06){l.classList.add('is-moving');clearTimeout(tm);tm=setTimeout(()=>l.classList.remove('is-moving'),180)}px=e.clientX;py=e.clientY;pt=now});
+})();
+</script></body></html>
