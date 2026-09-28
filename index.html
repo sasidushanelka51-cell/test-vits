@@ -73,9 +73,85 @@
 @keyframes sscpcScrollLine{0%,100%{opacity:.25;transform:scaleY(.65);transform-origin:top}50%{opacity:1;transform:scaleY(1);transform-origin:top}}
 .sscpc-corner-glow{position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(circle at 50% 48%,rgba(30,40,100,.12),transparent 40%)}
 @media(max-width:700px){.scroll-hero{min-height:600px!important}.scroll-hero .intro__logo{width:72vw!important;height:72vw!important}.scroll-hero .intro__reticle{width:80vw!important;height:80vw!important}.scroll-hero .intro__reticle i{width:22px!important;height:22px!important}.sscpc-loader-dots{gap:23px}.sscpc-loader-dot{width:17px;height:17px}}
-</style></head>
+</style>
+<style id="sscpc-reference-v2">
+/* FUTURISTIC REFERENCE UI — SSCPC */
+:root{--ssc-red:#ff3155;--ssc-blue:#171b9c;--ssc-cream:#f1eee1;--ssc-navy:#050714}
+body{cursor:default}
+#sscpc-loader{background:#f7f7f5}
+.sscpc-loader-mark{position:relative;width:min(190px,42vw);aspect-ratio:1;display:grid;place-items:center;perspective:900px;transform-style:preserve-3d;animation:loaderFloat 3.2s ease-in-out infinite}
+.sscpc-loader-mark img,.loader-depth,.loader-sweep{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.sscpc-loader-mark img{z-index:5;transform:translateZ(26px);filter:drop-shadow(0 18px 24px rgba(0,0,0,.18))}
+.loader-depth{background:url("assets/sscpc-logo.webp") center/contain no-repeat;pointer-events:none}
+.loader-depth.ld1{transform:translate3d(0,5px,-8px) scale(.99);filter:brightness(.75)}
+.loader-depth.ld2{transform:translate3d(0,10px,-18px) scale(.975);filter:brightness(.52)}
+.loader-depth.ld3{transform:translate3d(0,15px,-30px) scale(.95);filter:brightness(.3)}
+.loader-sweep{z-index:8;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 72%,rgba(255,255,255,.85) 78%,transparent 84%);mix-blend-mode:screen;animation:loaderSweep 2.1s linear infinite;pointer-events:none}
+@keyframes loaderSweep{to{transform:rotate(360deg)}}@keyframes loaderFloat{50%{transform:translateY(-7px) rotateX(2deg) rotateY(-2deg)}}
+.sscpc-loader-dots{display:none!important}
+
+/* Navigation becomes a clean glass/futuristic control bar */
+.nav{z-index:9000!important;background:linear-gradient(180deg,rgba(5,7,20,.88),rgba(5,7,20,.18))!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.055)}
+.nav .wrap{position:relative}
+.brand{letter-spacing:.16em!important;font-family:"Share Tech Mono",monospace!important}
+.brand-ico{transition:transform .55s cubic-bezier(.16,1,.3,1),filter .55s}
+.brand:hover .brand-ico{transform:rotate(-8deg) scale(1.12);filter:drop-shadow(0 0 12px rgba(255,49,85,.4))}
+.menu{gap:clamp(12px,2vw,30px)!important}
+.menu a{position:relative;transition:color .3s,transform .3s}
+.menu a:not(.reg)::after{content:"";position:absolute;left:0;right:100%;bottom:-7px;height:1px;background:var(--ssc-red);transition:right .35s cubic-bezier(.16,1,.3,1)}
+.menu a:not(.reg):hover{transform:translateY(-2px);color:#fff!important}.menu a:not(.reg):hover::after{right:0}
+.menu .reg{border:1px solid rgba(255,49,85,.65)!important;box-shadow:inset 0 0 0 1px rgba(255,49,85,.08),0 0 22px rgba(255,49,85,.06);transition:.35s}
+.menu .reg:hover{background:var(--ssc-red)!important;color:#fff!important;transform:translateY(-2px);box-shadow:0 8px 35px rgba(255,49,85,.22)}
+
+/* Hero gets scanlines, lens glow and subtle technical framing */
+.scroll-hero:before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.18;background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(255,255,255,.025) 4px)}
+.scroll-hero:after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(circle at 50% 48%,transparent 0 27%,rgba(0,0,0,.18) 58%,rgba(0,0,0,.55) 100%)}
+.sscpc-corner-glow{z-index:3!important}
+.scroll-hero .intro__logo{z-index:5!important}
+.scroll-hero .intro__reticle{z-index:6!important}
+.scroll-hero .intro__reticle:before{content:"SSCPC / 1945";position:absolute;left:50%;top:-29px;transform:translateX(-50%);font:10px "Share Tech Mono",monospace;letter-spacing:3px;color:rgba(255,255,255,.45);white-space:nowrap}
+.scroll-hero .intro__reticle:after{content:"FOCUS  •  50mm  •  1/125";position:absolute;right:-1px;bottom:-27px;font:9px "Share Tech Mono",monospace;letter-spacing:2px;color:rgba(255,255,255,.35);white-space:nowrap}
+
+/* Add a technical HUD around the logo */
+.scroll-hero .intro__stage:before{content:"REC  ●";position:absolute;left:32px;top:105px;z-index:7;font:11px "Share Tech Mono",monospace;letter-spacing:2px;color:rgba(255,255,255,.5)}
+.scroll-hero .intro__stage:after{content:"KANDY / SRI LANKA";position:absolute;right:32px;bottom:104px;z-index:7;font:10px "Share Tech Mono",monospace;letter-spacing:2px;color:rgba(255,255,255,.35)}
+.sscpc-3d-logo>img{transition:filter .4s,transform .4s}
+.sscpc-3d-logo:hover>img{filter:brightness(1.08) drop-shadow(0 0 22px rgba(75,84,190,.22))!important}
+
+/* Scroll indicator */
+.scroll-hero .intro__hint span{font-size:11px!important;letter-spacing:5px!important}
+@media(max-width:700px){
+ .scroll-hero .intro__stage:before{left:18px;top:86px;font-size:9px}
+ .scroll-hero .intro__stage:after{right:18px;bottom:92px;font-size:8px}
+ .scroll-hero .intro__reticle:after{display:none}
+ .nav{background:rgba(5,7,20,.82)!important}
+}
+
+/* Full-screen menu interaction */
+#sscpc-menu-fx{position:fixed;inset:0;z-index:8500;display:grid;place-items:center;background:rgba(3,5,15,.97);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .55s,visibility .55s}
+#sscpc-menu-fx.open{opacity:1;visibility:visible;pointer-events:auto}
+#sscpc-menu-fx .mf-ring{position:absolute;width:min(72vw,760px);aspect-ratio:1;border:1px solid rgba(255,255,255,.08);border-radius:50%;box-shadow:0 0 100px rgba(28,34,120,.18) inset;animation:mfSpin 20s linear infinite}
+#sscpc-menu-fx .mf-ring:before,#sscpc-menu-fx .mf-ring:after{content:"";position:absolute;inset:7%;border:1px dashed rgba(255,49,85,.18);border-radius:50%}
+#sscpc-menu-fx .mf-ring:after{inset:25%;border-color:rgba(255,255,255,.08)}
+@keyframes mfSpin{to{transform:rotate(360deg)}}
+#sscpc-menu-fx .mf-logo{position:absolute;width:min(34vw,310px);aspect-ratio:1;object-fit:contain;opacity:.22;filter:blur(.2px) drop-shadow(0 0 40px rgba(48,57,165,.35));animation:mfPulse 3s ease-in-out infinite}
+@keyframes mfPulse{50%{transform:scale(1.035);opacity:.3}}
+#sscpc-menu-fx .mf-links{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;gap:4px}
+#sscpc-menu-fx a{font:clamp(31px,5vw,68px)/1.08 "Share Tech Mono",monospace;letter-spacing:.04em;color:#fff;text-decoration:none;transform:translateY(22px);opacity:0;transition:transform .55s cubic-bezier(.16,1,.3,1),opacity .45s,color .25s}
+#sscpc-menu-fx.open a{transform:translateY(0);opacity:1}
+#sscpc-menu-fx.open a:nth-child(1){transition-delay:.06s}#sscpc-menu-fx.open a:nth-child(2){transition-delay:.10s}#sscpc-menu-fx.open a:nth-child(3){transition-delay:.14s}#sscpc-menu-fx.open a:nth-child(4){transition-delay:.18s}#sscpc-menu-fx.open a:nth-child(5){transition-delay:.22s}#sscpc-menu-fx.open a:nth-child(6){transition-delay:.26s}
+#sscpc-menu-fx a:hover{color:var(--ssc-red)}
+#sscpc-menu-fx .mf-meta{position:absolute;left:28px;bottom:24px;font:10px "Share Tech Mono",monospace;letter-spacing:2px;color:rgba(255,255,255,.35)}
+#sscpc-menu-fx .mf-close{position:absolute;right:26px;top:25px;border:0;background:none;color:#fff;font:36px/1 Arial;cursor:pointer}
+body.sscpc-menu-open{overflow:hidden}
+
+</head>
 <body><div id="sscpc-loader" aria-label="Loading SSCPC">
-  <div class="sscpc-loader-dots" aria-hidden="true"><i class="sscpc-loader-dot"></i><i class="sscpc-loader-dot"></i><i class="sscpc-loader-dot"></i></div>
+  <div class="sscpc-loader-mark" aria-hidden="true">
+    <span class="loader-depth ld3"></span><span class="loader-depth ld2"></span><span class="loader-depth ld1"></span>
+    <img src="assets/sscpc-logo.webp" alt="" draggable="false">
+    <span class="loader-sweep"></span>
+  </div>
   <div class="sscpc-loader-school" aria-hidden="true">
     <svg viewBox="0 0 100 62"><path d="M8 44 Q16 31 28 37 Q38 24 50 34 Q62 24 72 37 Q84 31 92 44 M20 43 L80 43 M50 8 L50 21 M46 12 L54 12 M43 16 L57 16 M38 21 L62 21" fill="none" stroke="#111" stroke-width="1.5"/><path d="M16 44 Q50 54 84 44" fill="none" stroke="#111" stroke-width="1.5"/></svg>
     <span>SINCE 1945</span>
@@ -638,4 +714,22 @@ host.addEventListener('pointermove',e=>{const now=performance.now(),dt=Math.max(
 const done=()=>{if(loader.classList.contains('done'))return;loader.classList.add('done');document.body.style.overflow='';document.documentElement.classList.remove('sscpc-loading')};
 window.addEventListener('load',()=>setTimeout(done,1850),{once:true});setTimeout(done,3800);
 })();
-</script></body></html>
+</script>
+<script id="sscpc-reference-v2-js">
+(()=> {
+ const nav=document.querySelector('.nav'), burger=document.getElementById('burger'), menu=document.getElementById('menu');
+ if(!burger||!menu)return;
+ const fx=document.createElement('div'); fx.id='sscpc-menu-fx';
+ fx.innerHTML='<div class="mf-ring"></div><img class="mf-logo" src="assets/sscpc-logo.webp" alt=""><div class="mf-links">'+
+ ['Home','About','Gallery','Spectrum','Committee','Contact'].map(x=>'<a href="#'+x.toLowerCase()+'">'+x+'</a>').join('')+
+ '</div><button class="mf-close" aria-label="Close menu">×</button><div class="mf-meta">SSCPC / ST. SYLVESTER’S COLLEGE / KANDY</div>';
+ document.body.appendChild(fx);
+ const links=[...fx.querySelectorAll('a')], close=fx.querySelector('.mf-close');
+ const open=()=>{fx.classList.add('open');document.body.classList.add('sscpc-menu-open');burger.setAttribute('aria-expanded','true');};
+ const shut=()=>{fx.classList.remove('open');document.body.classList.remove('sscpc-menu-open');burger.setAttribute('aria-expanded','false');};
+ burger.addEventListener('click',e=>{e.preventDefault();fx.classList.contains('open')?shut():open()});
+ close.addEventListener('click',shut); links.forEach(a=>a.addEventListener('click',shut));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')shut()});
+})();
+</script>
+</body></html>
